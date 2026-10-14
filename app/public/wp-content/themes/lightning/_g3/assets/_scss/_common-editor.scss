@@ -1,0 +1,6 @@
+// common.scss に入っている共通の CSS に対して、編集画面（.editor-styles-wrapper 内の編集キャンバス）でのみ
+// 補正を行うためのファイル。編集用 UI（操作パネル類）の指定は書かず、_editor-ui.scss へ置く。
+html :where(.wp-block) {
+	margin-top:0;
+	margin-bottom:0;
+}

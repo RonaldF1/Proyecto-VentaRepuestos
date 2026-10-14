@@ -1,0 +1,30 @@
+// 編集領域（.editor-styles-wrapper / .wp-block）の中身に対する補正のみを置く。
+// エディタ UI（操作パネル類）の指定は書かない。G2 は common.scss をトップレベルで読み込むため
+// 打ち消しが必要で block/_block_editor.scss に置いている（G3 は _editor-ui.scss）。
+.editor-styles-wrapper{
+	padding:0;
+	ul,
+	ol,
+	dl,
+	table,
+	figure,
+	p {
+		& + h1,
+		& + h2,
+		& + h3,
+		& + h4,
+		& + h5,
+		& + h6{
+			margin-top:2em;
+		}
+	}
+}
+
+html :where(.editor-styles-wrapper){
+	font-family: var(--vk-font-family);
+}
+
+html :where(.wp-block) {
+	margin-top:0;
+	margin-bottom:0;
+}

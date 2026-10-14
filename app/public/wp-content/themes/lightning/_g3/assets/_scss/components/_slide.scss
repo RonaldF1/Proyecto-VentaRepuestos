@@ -1,0 +1,128 @@
+@charset "utf-8";
+
+.ltg-slide {
+	.swiper-slide {
+		& > a {
+			width:100%;
+			height:auto;
+		}
+	}
+	&-cover {
+		position: absolute;
+		top: 0;
+		display: block;
+		overflow: hidden;
+		width: 100%;
+		height: 100%; // これがないと色が被せられない
+	}
+	&-text-set {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translateY(-50%) translateX(-50%);
+		width: 100%;
+		&--align--left {
+			.slide-text-title {
+				text-align: left;
+			}
+		}
+		&--align--center {
+			.slide-text-title {
+				text-align: center;
+			}
+		}
+		&--align--right {
+			.slide-text-title {
+				text-align: right;
+			}
+		}
+	}
+	&-text-title {
+		font-size: 18px;
+
+		//見出しデザインリセット（見出しデザイン指定にまけないように）
+		background-color:unset;
+		position: relative;
+		border:none;
+		padding:unset;
+		margin-left: unset;
+		margin-right: unset;
+		border-radius:unset;
+		outline: unset;
+		outline-offset: unset;
+		box-shadow: unset;
+		content:none;
+		overflow: unset;
+		margin-bottom:0;
+		// display:指定がないとh3の見出しデザインで左右線を選ばれた時に flax を指定されてるので文字の中央揃えなどが効かなくなる
+		display: block;
+		&::after,&::before{
+			content: none;
+		}
+		font-size:2dvw;
+		font-size:clamp(16px,3dvw,32px);
+	}
+	&-text-caption {
+		margin-bottom: 0;
+		font-size:clamp(12px,2dvw,18px);
+		line-height: 1.5;
+	}
+	&-text-title + &-text-caption {
+		margin-top: 0.5rem;
+		margin-bottom: 1rem;
+	}
+	.btn {
+		font-size:clamp(12px,1.8dvw,16px);
+	}
+	picture {
+		width: 100%;
+		height: auto;
+		img {
+			width: 100%;
+			height: auto;
+			display: block;
+		}	
+	}	
+	// .slide-text-set を含めると 現状カスタマイザからの色指定ががインラインで上書きが効かなくなる
+	.btn-ghost {
+		padding: 0.4em 2em 0.4em;
+		color: var(--vk-color-text-body);
+		border: 1px solid var(--vk-color-text-body);
+		&:hover{
+			border-color: var(--vk-color-primary);
+			background-color: var(--vk-color-primary);
+		}
+	}
+
+	/* ナビゲーション矢印
+	   ========================================================================== */
+
+	// 矢印は v11 まではアイコンフォントのグリフ、v12 以降は JS が注入する SVG。
+	// 他プラグインが先に v11 を読み込む場合があるため、どちらの描画方式にも同じ寸法を指定する。
+	// 寸法は .ltg-slide 側の変数に持たせ、追加 CSS からの上書きが 1 箇所で
+	// 新旧どちらの描画方式にも効くようにする（別々に書かせると片方だけ変わる）。
+	// 変数名は Swiper 自身の --swiper-navigation-size（矢印ボタンの箱の寸法）と
+	// 紛らわしくならないよう arrow とし、矢印そのものの寸法だと分かるようにする。
+	// em はトークン置換のため利用先で解決され、::after は親（ボタン）の font-size 基準、
+	// .swiper-navigation-icon は自身がボタンから継承した font-size 基準になる。
+	// どちらもボタンの font-size が基準で一致するため、新旧の描画方式で寸法がずれない。
+	// & で包んでいるのは、ネストされたルールの後に宣言を置くと Sass が
+	// mixed-decls の警告を出すため。
+	& {
+		--ltg-slide-arrow-size: 1.5em;
+	}
+	.swiper-button-prev,
+	.swiper-button-next {
+		&::after {
+			font-size: var(--ltg-slide-arrow-size);
+		}
+		.swiper-navigation-icon {
+			height: var(--ltg-slide-arrow-size);
+			width: auto;
+		}
+		// グリフが無くなった v12 以降でも効くよう、非表示はボタン自体に指定する。
+		@media ( width <= $xs-max ) {
+			display: none;
+		}
+	}
+}

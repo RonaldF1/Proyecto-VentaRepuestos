@@ -1,0 +1,57 @@
+# VK Swiper
+
+## 概要
+
+Swiper を Composer で導入するためのライブラリ
+
+`npm run update` で最新の Swiper が導入できます。
+
+
+## 使い方
+
+Composer の require に登録
+```
+composer require vektor-inc/vk-swiper
+```
+
+autoload.php を読み込み
+```
+require_once dirname( __FILE__ ) . '/vendor/autoload.php';
+```
+
+本体を読み込んで実行
+
+```
+use VektorInc\VK_Swiper\VkSwiper;
+new VkSwiper();
+VkSwiper::enqueue_swiper();
+```
+
+---
+
+## Change log
+
+= 0.4.1 =
+* [ 不具合修正 ] シンボリックリンクで WordPress が配置された環境（AWS Bitnami 等）で CSS / JS の読み込み URL が実在しない場所になり、スライダーが動作しない不具合を修正
+
+* [ 開発環境 ] @wordpress/env を 11.8.1 から 11.11.0、npm-check-updates を 22.2.7 から 23.0.0 にアップデート
+
+* [ 開発環境 ] adm-zip の脆弱性対応として overrides で 0.6.0 に固定（@wordpress/env が追随したら削除）
+
+= 0.4.0 =
+* [ 仕様変更 ] Swiper を 11.2.10 から 14.0.6 にアップデート
+
+* [ 開発環境 ] Node.js を 18.13.0 から 24.18.0、@wordpress/env を 10 から 11 にアップデート
+
+= 0.3.6 =
+* [ Fix ] WP_CONTENT_DIR / WP_CONTENT_URL / WP_PLUGIN_DIR 等をカスタマイズした環境でもリソースが正しく読み込まれるように get_directory_uri() を改善
+
+* [ Update ] Update Swiper 11.1.5
+
+* [ Update ] Update Swiper 11.1.4
+
+= 0.3.4 =
+* [ Update ] Update Swiper 11.0.2
+
+= 0.3.3 =
+* [ Bug fix ] fix css and js path //

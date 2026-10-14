@@ -1,0 +1,31 @@
+{
+    "engines": {
+        "node": ">=24"
+    },
+    "devDependencies": {
+        "@wordpress/env": "^11.8.1",
+        "autoprefixer": "^10.5.0",
+        "gulp": "^5.0.1",
+        "gulp-clean-css": "^4.3.0",
+        "gulp-plumber": "^1.2.1",
+        "gulp-postcss": "^10.0.0",
+        "gulp-sass": "^6.0.1",
+        "npm-check-updates": "^22.2.7",
+        "postcss-combine-media-query": "^2.1.0",
+        "sass": "^1.101.0"
+    },
+    "//overrides": "@wordpress/env が内包する js-yaml 3.x は DoS 脆弱性 (GHSA-h67p-54hq-rp68) を持つため ^4.2.0 に固定。wp-env は yaml.dump() のみ使用で v3/v4 互換のため安全。",
+    "overrides": {
+        "@wordpress/env": {
+            "js-yaml": "^4.2.0"
+        }
+    },
+    "scripts": {
+        "wp-env": "wp-env",
+        "update": "ncu -u && rm -rf node_modules package-lock.json && npm install",
+        "build": "gulp build && npm run translate",
+        "build:pot": "wp i18n make-pot . src/languages/vk-components.pot",
+        "translate": "npm run build:pot && cd src/languages && wp i18n make-php . && cd ../../",
+        "phpunit": "wp-env run tests-cli --env-cwd='wp-content/plugins/vk-component' vendor/bin/phpunit -c .phpunit.xml"
+    }
+}
