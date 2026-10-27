@@ -1,0 +1,24 @@
+$kind: http-request
+url: "{{base_url}}/bitacora?sistema=conector"
+method: GET
+queryParams:
+  sistema: conector
+scripts:
+  - type: afterResponse
+    code: "pm.test('Responde 200', function () {\r
+
+      \ pm.response.to.have.status(200);\r
+
+      });\r
+
+      pm.test('C6 · Solo registros del conector', function () {\r
+
+      \ pm.response.json().datos.forEach(function (x) {\r
+
+      \ pm.expect(x.sistema).to.eql('conector');\r
+
+      \ });\r
+
+      });\r\n"
+    language: text/javascript
+order: 5000

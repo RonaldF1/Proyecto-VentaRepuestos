@@ -1,0 +1,11 @@
+name: RDC Repuestos - Produccion
+values:
+  - key: url_tienda
+    value: ''
+  - key: consumer_key
+    secret: true
+  - key: consumer_secret
+    secret: true
+  - key: producto_id
+    value: ''
+color: 0

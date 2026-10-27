@@ -1,0 +1,29 @@
+$kind: http-request
+url: ""
+method: GET
+body:
+  type: json
+  content: "{\r
+
+    \ \"provincia\": \"Alajuela\",\r
+
+    \ \"canton\": \"San Carlos\",\r
+
+    \ \"distrito\": \"Quesada\",\r
+
+    \ \"otras_senas\": \"100 metros norte de la iglesia, casa verde\",\r
+
+    \ \"confianza\": 1.2\r
+
+    }"
+scripts:
+  - type: afterResponse
+    code: "const esquema = JSON.parse(pm.collectionVariables.get('esquema_direccion'));\r
+
+      const salida = pm.response.json().json;\r
+
+      pm.test('El esquema rechaza esta salida', function () {\r
+
+      \ \r\n"
+    language: text/javascript
+order: 7935

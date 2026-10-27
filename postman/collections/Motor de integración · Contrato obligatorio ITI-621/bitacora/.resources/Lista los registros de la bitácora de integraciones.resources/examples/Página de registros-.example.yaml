@@ -1,0 +1,239 @@
+$kind: http-example
+name: Página de registros.
+request:
+  url: "{{baseUrl}}/bitacora?pagina=1&por_pagina=15&sistema=conector&estado=exito&direccion=entrante&correlacion=string&desde=1963-02-04T06:45:23.884Z&hasta=1963-02-04T06:45:23.884Z"
+  method: GET
+  headers:
+    Accept: application/json
+  queryParams:
+    - key: pagina
+      value: "1"
+      disabled: false
+      description: Número de página (contrato C2).
+    - key: por_pagina
+      value: "15"
+      disabled: false
+      description: Elementos por página, máximo 100 (contrato C2).
+    - key: sistema
+      value: conector
+      disabled: false
+      description: ""
+    - key: estado
+      value: exito
+      disabled: false
+      description: ""
+    - key: direccion
+      value: entrante
+      disabled: false
+      description: ""
+    - key: correlacion
+      value: string
+      disabled: false
+      description: Identificador de correlación exacto (el de la entrega o el del pedido).
+    - key: desde
+      value: 1963-02-04T06:45:23.884Z
+      disabled: false
+      description: Fecha y hora mínima, ISO 8601.
+    - key: hasta
+      value: 1963-02-04T06:45:23.884Z
+      disabled: false
+      description: Fecha y hora máxima, ISO 8601.
+  body:
+    type: text
+    content: ""
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "datos": [
+          {
+            "id": 3549,
+            "fecha": "1951-03-02T15:04:32.236Z",
+            "direccion": "saliente",
+            "sistema": "ia",
+            "operacion": "ob6iscs3",
+            "estado": "fallo",
+            "codigo_http": 7103,
+            "intentos": 4835,
+            "duracion_ms": 3693,
+            "correlacion": "string",
+            "error": null
+          },
+          {
+            "id": 3219,
+            "fecha": "2009-06-06T17:58:10.896Z",
+            "direccion": "saliente",
+            "sistema": "tienda",
+            "operacion": "xjmuqlp",
+            "estado": "firma_invalida",
+            "codigo_http": null,
+            "intentos": 1737,
+            "duracion_ms": 8939,
+            "correlacion": null,
+            "error": "string"
+          }
+        ],
+        "meta": {
+          "pagina": 6294,
+          "por_pagina": 58,
+          "total": 4106,
+          "total_paginas": 3486
+        },
+        "enlaces": {
+          "anterior": null,
+          "siguiente": "string"
+        }
+      }
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "datos": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "fecha": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "direccion": {
+                  "type": "string",
+                  "enum": [
+                    "entrante",
+                    "saliente"
+                  ]
+                },
+                "sistema": {
+                  "type": "string",
+                  "enum": [
+                    "tienda",
+                    "conector",
+                    "ia",
+                    "heredado"
+                  ]
+                },
+                "operacion": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_]*$",
+                  "description": "Por ejemplo listar_productos, webhook_pedido_creado, ejecutar_accion o normalizar_direccion."
+                },
+                "estado": {
+                  "type": "string",
+                  "enum": [
+                    "exito",
+                    "fallo",
+                    "duplicado",
+                    "firma_invalida"
+                  ]
+                },
+                "codigo_http": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "description": "null cuando no hubo respuesta, por ejemplo por un error de conexión."
+                },
+                "intentos": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "duracion_ms": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "correlacion": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "error": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "Mensaje de error sin secretos ni cuerpos de peticiones."
+                }
+              },
+              "required": [
+                "id",
+                "fecha",
+                "direccion",
+                "sistema",
+                "operacion",
+                "estado",
+                "codigo_http",
+                "intentos",
+                "duracion_ms",
+                "correlacion",
+                "error"
+              ]
+            }
+          },
+          "meta": {
+            "type": "object",
+            "properties": {
+              "pagina": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "por_pagina": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 100
+              },
+              "total": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "total_paginas": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "pagina",
+              "por_pagina",
+              "total",
+              "total_paginas"
+            ]
+          },
+          "enlaces": {
+            "type": "object",
+            "properties": {
+              "anterior": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "siguiente": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "anterior",
+              "siguiente"
+            ]
+          }
+        },
+        "required": [
+          "datos",
+          "meta",
+          "enlaces"
+        ]
+      }
+order: 1000

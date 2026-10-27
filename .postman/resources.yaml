@@ -1,0 +1,13 @@
+workspace:
+  id: 08924288-0d39-4638-87fb-6bcdf75e4716
+
+localResources:
+  specs:
+    - ../app/public/wp-content/plugins/google-listings-and-ads/vendor/google/gax/src/Testing/mocks.proto
+    - ../postman/specs/Motor de integración · Contrato obligatorio
+      ITI-621/openapi.yaml
+    - ../postman/specs/practica-guiada.postman_collection.json/practica-guiada.postman_collection.json.json
+resourceNameMappings:
+  specs:
+    - ../postman/specs/Motor de integración · Contrato obligatorio ITI-621/openapi.yaml: Motor de integración · Contrato obligatorio ITI-621
+    - ../postman/specs/practica-guiada.postman_collection.json/practica-guiada.postman_collection.json.json: practica-guiada.postman_collection.json

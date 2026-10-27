@@ -1,0 +1,31 @@
+$kind: http-request
+url: "{{echo_url}}/post"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \ \"provincia\": \"Alajuela\",\r
+
+    \ \"canton\": \"San Carlos\",\r
+
+    \ \"distrito\": \"Quesada\",\r
+
+    \ \"otras_senas\": \"100 metros norte de la iglesia, casa verde\",\r
+
+    \ \"confianza\": 0.93\r
+
+    }"
+scripts:
+  - type: afterResponse
+    code: "const esquema = JSON.parse(pm.collectionVariables.get('esquema_direccion'));\r
+
+      const salida = pm.response.json().json;\r
+
+      pm.test('La salida cumple el esquema', function () {\r
+
+      \ pm.expect(salida).to.have.jsonSchema(esquema);\r
+
+      });"
+    language: text/javascript
+order: 8000

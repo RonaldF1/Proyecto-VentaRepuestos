@@ -1,0 +1,713 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "name": "Practica guiada Ronald",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "01 Echo",
+      "item": [
+        {
+          "name": "Echo GET con parametros",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{echo_url}}/get?giro=cafeteria&ciudad=Quesada",
+              "host": [
+                "{{echo_url}}"
+              ],
+              "path": [
+                "get"
+              ],
+              "query": [
+                {
+                  "key": "giro",
+                  "value": "cafeteria"
+                },
+                {
+                  "key": "ciudad",
+                  "value": "Quesada"
+                }
+              ]
+            },
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "Echo POST pedido",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{echo_url}}/post",
+              "host": [
+                "{{echo_url}}"
+              ],
+              "path": [
+                "post"
+              ]
+            },
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"pedido\": 1001,\r\n    \"productos\": [\r\n    { \"sku\": \"CAF-TAR-250\", \"cantidad\": 2 }\r\n    ],\r\n    \"total\": 10400\r\n    }\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Echo estado 404",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{echo_url}}/status/201",
+              "host": [
+                "{{echo_url}}"
+              ],
+              "path": [
+                "status",
+                "201"
+              ]
+            },
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "Echo demora 2 s",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{echo_url}}/delay/2",
+              "host": [
+                "{{echo_url}}"
+              ],
+              "path": [
+                "delay",
+                "2"
+              ]
+            },
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "Direccion A-1",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "",
+              "host": [],
+              "path": []
+            },
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"provincia\": \"Alajuela\",\r\n    \"canton\": \"San Carlos\",\r\n    \"distrito\": \"Quesada\",\r\n    \"otras_senas\": \"100 metros norte de la iglesia, casa verde\",\r\n    \"telefono\": \"8888-8888\",\r\n    \"confianza\": 0.93\r\n    }\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const esquema = JSON.parse(pm.collectionVariables.get('esquema_direccion'));\r",
+                  "      const salida = pm.response.json().json;\r",
+                  "      pm.test('El esquema rechaza esta salida', function () {\r",
+                  "       "
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Direccion A-2",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "",
+              "host": [],
+              "path": []
+            },
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"provincia\": \"San Carlos\",\r\n    \"canton\": \"San Carlos\",\r\n    \"distrito\": \"Quesada\",\r\n    \"otras_senas\": \"100 metros norte de la iglesia, casa verde\",\r\n    \"confianza\": 0.93\r\n    }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const esquema = JSON.parse(pm.collectionVariables.get('esquema_direccion'));\r",
+                  "      const salida = pm.response.json().json;\r",
+                  "      pm.test('El esquema rechaza esta salida', function () {\r",
+                  "       "
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Direccion D",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "",
+              "host": [],
+              "path": []
+            },
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"provincia\": \"Alajuela\",\r\n    \"canton\": \"San Carlos\",\r\n    \"distrito\": \"Quesada\",\r\n    \"otras_senas\": \"100 metros norte de la iglesia, casa verde\",\r\n    \"confianza\": 1.2\r\n    }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const esquema = JSON.parse(pm.collectionVariables.get('esquema_direccion'));\r",
+                  "      const salida = pm.response.json().json;\r",
+                  "      pm.test('El esquema rechaza esta salida', function () {\r",
+                  "       \r",
+                  ""
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Direccion E",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{echo_url}}/post",
+              "host": [
+                "{{echo_url}}"
+              ],
+              "path": [
+                "post"
+              ]
+            },
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"provincia\": \"Alajuela\",\r\n    \"canton\": \"San Carlos\",\r\n    \"distrito\": \"Quesada\",\r\n    \"otras_senas\": \"100 metros norte de la iglesia, casa verde\",\r\n    \"confianza\": 0.93\r\n    }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const esquema = JSON.parse(pm.collectionVariables.get('esquema_direccion'));\r",
+                  "      const salida = pm.response.json().json;\r",
+                  "      pm.test('La salida cumple el esquema', function () {\r",
+                  "       pm.expect(salida).to.have.jsonSchema(esquema);\r",
+                  "      });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "02 Tienda",
+      "item": [
+        {
+          "name": "Listar productos Sin credenciales",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{tienda_url}}/wp-json/wc/v3/products?per_page=5&page=1",
+              "host": [
+                "{{tienda_url}}"
+              ],
+              "path": [
+                "wp-json",
+                "wc",
+                "v3",
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "per_page",
+                  "value": "5"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                }
+              ]
+            },
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Responde 401', function () {\r",
+                  "       pm.response.to.have.status(401);\r",
+                  "      });\r",
+                  "      pm.test('El código dice que no puede ver', function () {\r",
+                  "       const codigo = pm.response.json().code;\r",
+                  "       pm.expect(codigo).to.eql('woocommerce_rest_cannot_view');\r",
+                  "      });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar productos",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{tienda_url}}/wp-json/wc/v3/products?per_page=5&page=1",
+              "host": [
+                "{{tienda_url}}"
+              ],
+              "path": [
+                "wp-json",
+                "wc",
+                "v3",
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "per_page",
+                  "value": "5"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                }
+              ]
+            },
+            "header": []
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const productos = pm.response.json();\r",
+                  "      pm.environment.set('producto_id', productos[0].id);\r",
+                  "      pm.test('Responde 200', function () {\r",
+                  "       pm.response.to.have.status(200);\r",
+                  "      });\r",
+                  "      pm.test('Trae la cabecera X-WP-TotalPages', function () {\r",
+                  "       pm.response.to.have.header('X-WP-TotalPages');\r",
+                  "      });\r",
+                  "      pm.test('Devuelve como máximo 5 productos', function () {\r",
+                  "       pm.expect(pm.response.json().length).to.be.at.most(5);\r",
+                  "      });\r",
+                  "      pm.test('Responde en menos de 3 s', function () {\r",
+                  "       pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+                  "      });\r",
+                  ""
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Obtener un producto",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{tienda_url}}/wp-json/wc/v3/products/{{producto_id}}",
+              "host": [
+                "{{tienda_url}}"
+              ],
+              "path": [
+                "wp-json",
+                "wc",
+                "v3",
+                "products",
+                "{{producto_id}}"
+              ]
+            },
+            "header": []
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const esquemaProducto = {\r",
+                  "       type: 'object',\r",
+                  "       required: ['id', 'name', 'sku', 'price', 'stock_quantity'],\r",
+                  "       properties: {\r",
+                  "       id: { type: 'integer' },\r",
+                  "       name: { type: 'string' },\r",
+                  "       sku: { type: 'string' },\r",
+                  "       price: { type: 'string' },\r",
+                  "       stock_quantity: { type: ['integer', 'null'] }\r",
+                  "       }\r",
+                  "      };\r",
+                  "      pm.test('Cumple el esquema del producto', function () {\r",
+                  "       pm.response.to.have.jsonSchema(esquemaProducto);\r",
+                  "      });\r",
+                  "      pm.test('Trae el campo propio del plugin', function () {\r",
+                  "       const campo = pm.environment.get('campo_propio');\r",
+                  "       pm.expect(pm.response.json()).to.have.property(campo);\r",
+                  "      });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "per_page fuera de rango",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{tienda_url}}/wp-json/wc/v3/products?per_page=101",
+              "host": [
+                "{{tienda_url}}"
+              ],
+              "path": [
+                "wp-json",
+                "wc",
+                "v3",
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "per_page",
+                  "value": "101"
+                }
+              ]
+            },
+            "header": []
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Responde 400', function () {\r",
+                  "       pm.response.to.have.status(400);\r",
+                  "      });\r",
+                  "      pm.test('El código es rest_invalid_param', function () {\r",
+                  "       const codigo = pm.response.json().code;\r",
+                  "       pm.expect(codigo).to.eql('rest_invalid_param');\r",
+                  "      });\r",
+                  ""
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Producto inexistente",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{tienda_url}}/wp-json/wc/v3/products/999999",
+              "host": [
+                "{{tienda_url}}"
+              ],
+              "path": [
+                "wp-json",
+                "wc",
+                "v3",
+                "products",
+                "999999"
+              ]
+            },
+            "header": []
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Responde 404', function () {\r",
+                  "       pm.response.to.have.status(404);\r",
+                  "      });\r",
+                  "      pm.test('El código dice que el id no es válido', function () {\r",
+                  "       const codigo = pm.response.json().code;\r",
+                  "       pm.expect(codigo).to.eql('woocommerce_rest_product_invalid_id');\r",
+                  "      });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "03 Contrato",
+      "item": [
+        {
+          "name": "Productos pagina 2",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/productos?pagina=2&por_pagina=5",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "productos"
+              ],
+              "query": [
+                {
+                  "key": "pagina",
+                  "value": "2"
+                },
+                {
+                  "key": "por_pagina",
+                  "value": "5"
+                }
+              ]
+            },
+            "header": []
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Responde 200', function () {",
+                  " pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('C2 · Respeta pagina y por_pagina', function () {",
+                  " const r = pm.response.json();",
+                  " pm.expect(r.meta.pagina).to.eql(2);",
+                  " pm.expect(r.meta.por_pagina).to.eql(5);",
+                  " pm.expect(r.datos.length).to.be.at.most(5);",
+                  "});",
+                  ""
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "por_pagina fuera de rango",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/productos?por_pagina=101",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "productos"
+              ],
+              "query": [
+                {
+                  "key": "por_pagina",
+                  "value": "101"
+                }
+              ]
+            },
+            "header": []
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Responde 422', function () {",
+                  " pm.response.to.have.status(422);",
+                  "});",
+                  "pm.test('C3 · error.codigo es validacion', function () {",
+                  " pm.expect(pm.response.json().error.codigo).to.eql('validacion');",
+                  "});",
+                  ""
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Pedido 1001",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/pedidos/1001",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pedidos",
+                "1001"
+              ]
+            },
+            "header": []
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const esquema = JSON.parse(pm.collectionVariables.get('esquema_direccion'));\r",
+                  "      const pedido = pm.response.json();\r",
+                  "      pm.test('Responde 200', function () {\r",
+                  "       pm.response.to.have.status(200);\r",
+                  "      });\r",
+                  "      pm.test('C7 · La dirección normalizada cumple el esquema', function () {\r",
+                  "       pm.expect(pedido.direccion.normalizada).to.have.jsonSchema(esquema);\r",
+                  "      });\r",
+                  "      pm.test('C8 · No trae el teléfono del cliente', function () {\r",
+                  "       pm.expect(pedido).to.not.have.property('telefono');\r",
+                  "      });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Pedido inexistente",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/pedidos/999999",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pedidos",
+                "999999"
+              ]
+            },
+            "header": []
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Responde 404', function () {\r",
+                  "       pm.response.to.have.status(404);\r",
+                  "      });\r",
+                  "      pm.test('C3 · error.codigo es no_encontrado', function () {\r",
+                  "       pm.expect(pm.response.json().error.codigo).to.eql('no_encontrado');\r",
+                  "      });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Bitacora del conector",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/bitacora?sistema=conector",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "bitacora"
+              ],
+              "query": [
+                {
+                  "key": "sistema",
+                  "value": "conector"
+                }
+              ]
+            },
+            "header": []
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Responde 200', function () {\r",
+                  "       pm.response.to.have.status(200);\r",
+                  "      });\r",
+                  "      pm.test('C6 · Solo registros del conector', function () {\r",
+                  "       pm.response.json().datos.forEach(function (x) {\r",
+                  "       pm.expect(x.sistema).to.eql('conector');\r",
+                  "       });\r",
+                  "      });\r",
+                  ""
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "echo_url",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "esquema_direccion",
+      "value": "{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"title\":\"DireccionNormalizada\",\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"provincia\",\"canton\",\"distrito\",\"otras_senas\",\"confianza\"],\"properties\":{\"provincia\":{\"type\":\"string\",\"enum\":[\"San José\",\"Alajuela\",\"Cartago\",\"Heredia\",\"Guanacaste\",\"Puntarenas\",\"Limón\"]},\"canton\":{\"type\":\"string\",\"minLength\":1,\"maxLength\":60},\"distrito\":{\"type\":\"string\",\"minLength\":1,\"maxLength\":60},\"otras_senas\":{\"type\":\"string\",\"maxLength\":250},\"confianza\":{\"type\":\"number\",\"minimum\":0,\"maximum\":1}}}",
+      "type": "string"
+    }
+  ]
+}

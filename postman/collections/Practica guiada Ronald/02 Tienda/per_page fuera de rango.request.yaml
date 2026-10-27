@@ -1,0 +1,22 @@
+$kind: http-request
+url: "{{tienda_url}}/wp-json/wc/v3/products?per_page=101"
+method: GET
+queryParams:
+  per_page: "101"
+scripts:
+  - type: afterResponse
+    code: "pm.test('Responde 400', function () {\r
+
+      \ pm.response.to.have.status(400);\r
+
+      });\r
+
+      pm.test('El código es rest_invalid_param', function () {\r
+
+      \ const codigo = pm.response.json().code;\r
+
+      \ pm.expect(codigo).to.eql('rest_invalid_param');\r
+
+      });\r\n"
+    language: text/javascript
+order: 4000

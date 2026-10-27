@@ -1,0 +1,9 @@
+$kind: collection
+auth:
+  - id: 5a2cc246-20ce-4560-a886-344f1d6a6262
+    type: basic
+    name: Basic Auth
+    credentials:
+      username: "{{ck}}"
+      password: "{{cs}}"
+order: 3000

@@ -1,0 +1,25 @@
+$kind: http-request
+url: "{{tienda_url}}/wp-json/wc/v3/products?per_page=5&page=1"
+method: GET
+queryParams:
+  per_page: "5"
+  page: "1"
+auth:
+  type: noauth
+scripts:
+  - type: afterResponse
+    code: "pm.test('Responde 401', function () {\r
+
+      \ pm.response.to.have.status(401);\r
+
+      });\r
+
+      pm.test('El código dice que no puede ver', function () {\r
+
+      \ const codigo = pm.response.json().code;\r
+
+      \ pm.expect(codigo).to.eql('woocommerce_rest_cannot_view');\r
+
+      });"
+    language: text/javascript
+order: 1383

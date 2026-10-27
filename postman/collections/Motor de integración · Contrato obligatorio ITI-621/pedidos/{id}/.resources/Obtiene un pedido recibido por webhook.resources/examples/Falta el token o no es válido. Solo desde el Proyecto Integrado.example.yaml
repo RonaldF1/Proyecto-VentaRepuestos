@@ -1,0 +1,83 @@
+$kind: http-example
+name: Falta el token o no es válido. Solo desde el Proyecto Integrador (contrato C3).
+request:
+  url: "{{baseUrl}}/pedidos/:id"
+  method: GET
+  headers:
+    Accept: application/json
+  pathVariables:
+    - key: id
+      value: "7328"
+      disabled: false
+      description: Identificador del pedido en la tienda.
+  body:
+    type: text
+    content: ""
+response:
+  statusCode: 401
+  statusText: Unauthorized
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "error": {
+          "codigo": "no_autenticado",
+          "mensaje": "Se requiere un token válido.",
+          "detalles": []
+        }
+      }
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "codigo": {
+                "type": "string",
+                "enum": [
+                  "solicitud_invalida",
+                  "no_autenticado",
+                  "prohibido",
+                  "no_encontrado",
+                  "validacion",
+                  "limite_excedido",
+                  "error_interno"
+                ]
+              },
+              "mensaje": {
+                "type": "string"
+              },
+              "detalles": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "campo": {
+                      "type": "string"
+                    },
+                    "mensaje": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "campo",
+                    "mensaje"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "codigo",
+              "mensaje",
+              "detalles"
+            ]
+          }
+        },
+        "required": [
+          "error"
+        ]
+      }
+order: 2000

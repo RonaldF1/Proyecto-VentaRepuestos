@@ -1,0 +1,30 @@
+$kind: http-request
+description: El id es el identificador del pedido en WooCommerce (contrato C5).
+url: "{{baseUrl}}/pedidos/:id"
+method: GET
+headers:
+  Accept: application/json
+pathVariables:
+  - key: id
+    value: "7328"
+    disabled: false
+    description: Identificador del pedido en la tienda.
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "value"
+        ]
+      }
+body:
+  type: text
+  content: ""
+settings: {}
+examples: ./.resources/Obtiene un pedido recibido por webhook.resources/examples
+order: 1000

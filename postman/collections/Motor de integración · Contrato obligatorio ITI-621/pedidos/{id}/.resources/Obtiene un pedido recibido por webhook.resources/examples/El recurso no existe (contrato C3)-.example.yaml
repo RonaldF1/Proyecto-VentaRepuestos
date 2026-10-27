@@ -1,0 +1,83 @@
+$kind: http-example
+name: El recurso no existe (contrato C3).
+request:
+  url: "{{baseUrl}}/pedidos/:id"
+  method: GET
+  headers:
+    Accept: application/json
+  pathVariables:
+    - key: id
+      value: "7328"
+      disabled: false
+      description: Identificador del pedido en la tienda.
+  body:
+    type: text
+    content: ""
+response:
+  statusCode: 404
+  statusText: Not Found
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "error": {
+          "codigo": "no_encontrado",
+          "mensaje": "No existe un pedido con id 999999.",
+          "detalles": []
+        }
+      }
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "codigo": {
+                "type": "string",
+                "enum": [
+                  "solicitud_invalida",
+                  "no_autenticado",
+                  "prohibido",
+                  "no_encontrado",
+                  "validacion",
+                  "limite_excedido",
+                  "error_interno"
+                ]
+              },
+              "mensaje": {
+                "type": "string"
+              },
+              "detalles": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "campo": {
+                      "type": "string"
+                    },
+                    "mensaje": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "campo",
+                    "mensaje"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "codigo",
+              "mensaje",
+              "detalles"
+            ]
+          }
+        },
+        "required": [
+          "error"
+        ]
+      }
+order: 3000

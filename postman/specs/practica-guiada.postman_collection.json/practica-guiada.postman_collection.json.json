@@ -1,0 +1,285 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "practica-guiada.postman_collection.json",
+    "version": "1.0.0",
+    "description": ""
+  },
+  "servers": [
+    {
+      "url": "{{echo_url}}"
+    },
+    {
+      "url": ""
+    },
+    {
+      "url": "{{tienda_url}}"
+    },
+    {
+      "url": "{{base_url}}"
+    }
+  ],
+  "paths": {
+    "/get": {
+      "get": {
+        "summary": "Echo GET con parametros",
+        "parameters": [
+          {
+            "name": "giro",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "example": "cafeteria"
+          },
+          {
+            "name": "ciudad",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Quesada"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "01 Echo"
+        ]
+      }
+    },
+    "/post": {
+      "post": {
+        "summary": "Echo POST pedido",
+        "responses": {},
+        "tags": [
+          "01 Echo"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pedido": {
+                    "type": "integer"
+                  },
+                  "productos": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "sku": {
+                          "type": "string"
+                        },
+                        "cantidad": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  },
+                  "total": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "example": {
+                "pedido": 1001,
+                "productos": [
+                  {
+                    "sku": "CAF-TAR-250",
+                    "cantidad": 2
+                  }
+                ],
+                "total": 10400
+              }
+            }
+          }
+        }
+      }
+    },
+    "/status/201": {
+      "get": {
+        "summary": "Echo estado 404",
+        "responses": {},
+        "tags": [
+          "01 Echo"
+        ]
+      }
+    },
+    "/delay/2": {
+      "get": {
+        "summary": "Echo demora 2 s",
+        "responses": {},
+        "tags": [
+          "01 Echo"
+        ]
+      }
+    },
+    "/": {
+      "get": {
+        "summary": "Direccion A",
+        "responses": {},
+        "tags": [
+          "01 Echo"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "provincia": {
+                    "type": "string"
+                  },
+                  "canton": {
+                    "type": "string"
+                  },
+                  "distrito": {
+                    "type": "string"
+                  },
+                  "otras_senas": {
+                    "type": "string"
+                  },
+                  "telefono": {
+                    "type": "string"
+                  },
+                  "confianza": {
+                    "type": "number"
+                  }
+                }
+              },
+              "example": {
+                "provincia": "Alajuela",
+                "canton": "San Carlos",
+                "distrito": "Quesada",
+                "otras_senas": "100 metros norte de la iglesia, casa verde",
+                "telefono": "8888-8888",
+                "confianza": 0.93
+              }
+            }
+          }
+        }
+      }
+    },
+    "/wp-json/wc/v3/products": {
+      "get": {
+        "summary": "Listar productos Sin credenciales",
+        "parameters": [
+          {
+            "name": "per_page",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "example": 5
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "example": 1
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "02 Tienda"
+        ]
+      }
+    },
+    "/wp-json/wc/v3/products/{producto_id}": {
+      "get": {
+        "summary": "Obtener un producto",
+        "responses": {},
+        "tags": [
+          "02 Tienda"
+        ]
+      },
+      "parameters": [
+        {
+          "name": "producto_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "example": "{{producto_id}}"
+        }
+      ]
+    },
+    "/wp-json/wc/v3/products/999999": {
+      "get": {
+        "summary": "Producto inexistente",
+        "responses": {},
+        "tags": [
+          "02 Tienda"
+        ]
+      }
+    },
+    "/productos": {
+      "get": {
+        "summary": "Productos pagina 2",
+        "parameters": [
+          {
+            "name": "pagina",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "example": 2
+          },
+          {
+            "name": "por_pagina",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "example": 50
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "03 Contrato"
+        ]
+      }
+    },
+    "/pedidos/1001": {
+      "get": {
+        "summary": "Pedido 1001",
+        "responses": {},
+        "tags": [
+          "03 Contrato"
+        ]
+      }
+    },
+    "/pedidos/999999 ": {
+      "get": {
+        "summary": "Pedido inexistente",
+        "responses": {},
+        "tags": [
+          "03 Contrato"
+        ]
+      }
+    },
+    "/bitacora": {
+      "get": {
+        "summary": "Bitacora del conector",
+        "parameters": [
+          {
+            "name": "sistema",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "example": "conector"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "03 Contrato"
+        ]
+      }
+    }
+  }
+}

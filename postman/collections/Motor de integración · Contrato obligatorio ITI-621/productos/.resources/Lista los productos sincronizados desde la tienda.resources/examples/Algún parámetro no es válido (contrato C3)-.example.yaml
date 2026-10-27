@@ -1,0 +1,96 @@
+$kind: http-example
+name: Algún parámetro no es válido (contrato C3).
+request:
+  url: "{{baseUrl}}/productos?pagina=1&por_pagina=15&sku=string"
+  method: GET
+  headers:
+    Accept: application/json
+  queryParams:
+    - key: pagina
+      value: "1"
+      disabled: false
+      description: Número de página (contrato C2).
+    - key: por_pagina
+      value: "15"
+      disabled: false
+      description: Elementos por página, máximo 100 (contrato C2).
+    - key: sku
+      value: string
+      disabled: false
+      description: Filtra por SKU exacto.
+  body:
+    type: text
+    content: ""
+response:
+  statusCode: 422
+  statusText: Unprocessable Entity (WebDAV) (RFC 4918)
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "error": {
+          "codigo": "validacion",
+          "mensaje": "Los datos de la petición no son válidos.",
+          "detalles": [
+            {
+              "campo": "por_pagina",
+              "mensaje": "Debe ser un entero entre 1 y 100."
+            }
+          ]
+        }
+      }
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "codigo": {
+                "type": "string",
+                "enum": [
+                  "solicitud_invalida",
+                  "no_autenticado",
+                  "prohibido",
+                  "no_encontrado",
+                  "validacion",
+                  "limite_excedido",
+                  "error_interno"
+                ]
+              },
+              "mensaje": {
+                "type": "string"
+              },
+              "detalles": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "campo": {
+                      "type": "string"
+                    },
+                    "mensaje": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "campo",
+                    "mensaje"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "codigo",
+              "mensaje",
+              "detalles"
+            ]
+          }
+        },
+        "required": [
+          "error"
+        ]
+      }
+order: 3000

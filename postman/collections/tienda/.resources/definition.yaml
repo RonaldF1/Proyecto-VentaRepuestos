@@ -1,0 +1,8 @@
+$kind: collection
+auth:
+  - id: 55fe4fa3-7ec2-4388-81fc-6705df7ceed7
+    type: basic
+    name: Basic Auth
+    credentials:
+      username: "{{consumer_key}}"
+      password: "{{consumer_secret}}"

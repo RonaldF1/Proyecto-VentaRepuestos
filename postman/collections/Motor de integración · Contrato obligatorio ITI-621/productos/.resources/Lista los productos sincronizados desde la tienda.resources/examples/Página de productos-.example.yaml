@@ -1,0 +1,219 @@
+$kind: http-example
+name: Página de productos.
+request:
+  url: "{{baseUrl}}/productos?pagina=1&por_pagina=15&sku=string"
+  method: GET
+  headers:
+    Accept: application/json
+  queryParams:
+    - key: pagina
+      value: "1"
+      disabled: false
+      description: Número de página (contrato C2).
+    - key: por_pagina
+      value: "15"
+      disabled: false
+      description: Elementos por página, máximo 100 (contrato C2).
+    - key: sku
+      value: string
+      disabled: false
+      description: Filtra por SKU exacto.
+  body:
+    type: text
+    content: ""
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "datos": [
+          {
+            "id": 7,
+            "id_tienda": 42,
+            "sku": "CAF-TAR-250",
+            "nombre": "Café Tarrazú 250 g",
+            "tipo": "simple",
+            "precio": 5200,
+            "existencias": 12,
+            "categorias": [
+              "Café en grano"
+            ],
+            "campo_propio": {
+              "nombre": "origen_grano",
+              "valor": "tarrazu"
+            },
+            "sincronizado_en": "2026-11-03T15:20:11-06:00"
+          }
+        ],
+        "meta": {
+          "pagina": 1,
+          "por_pagina": 15,
+          "total": 1,
+          "total_paginas": 1
+        },
+        "enlaces": {
+          "anterior": null,
+          "siguiente": null
+        }
+      }
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "datos": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "description": "Identificador en el motor."
+                },
+                "id_tienda": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "description": "Identificador del producto en WooCommerce."
+                },
+                "sku": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100
+                },
+                "nombre": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200
+                },
+                "tipo": {
+                  "type": "string",
+                  "enum": [
+                    "simple",
+                    "variable",
+                    "agrupado",
+                    "externo"
+                  ]
+                },
+                "precio": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 0,
+                  "description": "Colones, sin decimales. En un producto variable, el precio menor."
+                },
+                "existencias": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "description": "null cuando la tienda no gestiona el inventario de ese producto."
+                },
+                "categorias": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "campo_propio": {
+                  "type": "object",
+                  "description": "El campo que agrega el plugin propio del equipo; su nombre cambia según el giro.",
+                  "properties": {
+                    "nombre": {
+                      "type": "string",
+                      "maxLength": 60,
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "valor": {
+                      "type": [
+                        "string",
+                        "number",
+                        "null"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "nombre",
+                    "valor"
+                  ]
+                },
+                "sincronizado_en": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "required": [
+                "id",
+                "id_tienda",
+                "sku",
+                "nombre",
+                "tipo",
+                "precio",
+                "existencias",
+                "categorias",
+                "campo_propio",
+                "sincronizado_en"
+              ]
+            }
+          },
+          "meta": {
+            "type": "object",
+            "properties": {
+              "pagina": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "por_pagina": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 100
+              },
+              "total": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "total_paginas": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "pagina",
+              "por_pagina",
+              "total",
+              "total_paginas"
+            ]
+          },
+          "enlaces": {
+            "type": "object",
+            "properties": {
+              "anterior": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "siguiente": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "anterior",
+              "siguiente"
+            ]
+          }
+        },
+        "required": [
+          "datos",
+          "meta",
+          "enlaces"
+        ]
+      }
+order: 1000

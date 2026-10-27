@@ -1,0 +1,20 @@
+$kind: http-request
+url: "{{tienda_url}}/wp-json/wc/v3/products/999999"
+method: GET
+scripts:
+  - type: afterResponse
+    code: "pm.test('Responde 404', function () {\r
+
+      \ pm.response.to.have.status(404);\r
+
+      });\r
+
+      pm.test('El código dice que el id no es válido', function () {\r
+
+      \ const codigo = pm.response.json().code;\r
+
+      \ pm.expect(codigo).to.eql('woocommerce_rest_product_invalid_id');\r
+
+      });"
+    language: text/javascript
+order: 5000
