@@ -1,0 +1,239 @@
+$kind: http-example
+name: El pedido, con el estado de su dirección y del conector.
+request:
+  url: "{{baseUrl}}/pedidos/:id"
+  method: GET
+  headers:
+    Accept: application/json
+  pathVariables:
+    - key: id
+      value: "7328"
+      disabled: false
+      description: Identificador del pedido en la tienda.
+  body:
+    type: text
+    content: ""
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "id": 6894,
+        "estado": "string",
+        "moneda": "CRC",
+        "total": 2851,
+        "creado_en": "1993-02-19T18:49:11.611Z",
+        "lineas": [
+          {
+            "sku": "string",
+            "nombre": "string",
+            "cantidad": 4878,
+            "precio_unitario": 7406,
+            "subtotal": 9871
+          }
+        ],
+        "direccion": {
+          "estado": "pendiente_revision",
+          "texto": "string",
+          "normalizada": null
+        },
+        "conector": {
+          "estado": "pendiente",
+          "detalle": "string",
+          "referencia_externa": null,
+          "actualizado_en": "1994-08-24T21:06:14.324Z"
+        }
+      }
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Identificador del pedido en WooCommerce."
+          },
+          "estado": {
+            "type": "string",
+            "description": "Estado del pedido tal como lo reporta WooCommerce (pending, processing, completed…)."
+          },
+          "moneda": {
+            "type": "string",
+            "enum": [
+              "CRC"
+            ]
+          },
+          "total": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "creado_en": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lineas": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "sku": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "nombre": {
+                  "type": "string"
+                },
+                "cantidad": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "precio_unitario": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "subtotal": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "sku",
+                "nombre",
+                "cantidad",
+                "precio_unitario",
+                "subtotal"
+              ]
+            }
+          },
+          "direccion": {
+            "type": "object",
+            "properties": {
+              "estado": {
+                "type": "string",
+                "enum": [
+                  "sin_procesar",
+                  "normalizada",
+                  "pendiente_revision"
+                ]
+              },
+              "texto": {
+                "type": "string",
+                "description": "La dirección de envío tal como la escribió el cliente."
+              },
+              "normalizada": {
+                "oneOf": [
+                  {
+                    "description": "Copia exacta de direccion-normalizada.schema.json (contrato C7).",
+                    "type": "object",
+                    "properties": {
+                      "provincia": {
+                        "type": "string",
+                        "enum": [
+                          "San José",
+                          "Alajuela",
+                          "Cartago",
+                          "Heredia",
+                          "Guanacaste",
+                          "Puntarenas",
+                          "Limón"
+                        ]
+                      },
+                      "canton": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 60
+                      },
+                      "distrito": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 60
+                      },
+                      "otras_senas": {
+                        "type": "string",
+                        "maxLength": 250
+                      },
+                      "confianza": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      }
+                    },
+                    "required": [
+                      "provincia",
+                      "canton",
+                      "distrito",
+                      "otras_senas",
+                      "confianza"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "estado",
+              "texto",
+              "normalizada"
+            ]
+          },
+          "conector": {
+            "type": "object",
+            "properties": {
+              "estado": {
+                "type": "string",
+                "enum": [
+                  "pendiente",
+                  "exito",
+                  "fallo"
+                ]
+              },
+              "detalle": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "El estado que reporta el conector, por ejemplo enviado o cotizado."
+              },
+              "referencia_externa": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "El identificador que asignó el proveedor."
+              },
+              "actualizado_en": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "estado",
+              "detalle",
+              "referencia_externa",
+              "actualizado_en"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "estado",
+          "moneda",
+          "total",
+          "creado_en",
+          "lineas",
+          "direccion",
+          "conector"
+        ]
+      }
+order: 1000

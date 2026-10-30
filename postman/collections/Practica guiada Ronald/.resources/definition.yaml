@@ -1,0 +1,8 @@
+$kind: collection
+variables:
+  echo_url: ""
+  esquema_direccion: '{"type":"object","required":["provincia","canton","distrito","otras_senas","confianza"],"properties":{"provincia":{"type":"string"},"canton":{"type":"string"},"distrito":{"type":"string"},"otras_senas":{"type":"string"},"confianza":{"type":"number","minimum":0,"maximum":1}},"additionalProperties":false}'
+auth:
+  - id: a994bca3-4f92-499b-844f-bdb42acea885
+    type: apikey
+    name: API Key

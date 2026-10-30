@@ -1,0 +1,20 @@
+$kind: http-request
+description: ""
+url: "{{echo_url}}/post"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \ \"pedido\": 1001,\r
+
+    \ \"productos\": [\r
+
+    \ { \"sku\": \"CAF-TAR-250\", \"cantidad\": 2 }\r
+
+    \ ],\r
+
+    \ \"total\": 10400\r
+
+    }\r\n"
+order: 2000

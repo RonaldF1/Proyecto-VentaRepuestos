@@ -13,6 +13,8 @@ if (!defined('ABSPATH')) {
     exit();
 }
 
+require_once __DIR__ . '/php-version-notice.php';
+
 /**
  * Quote a value for display in a POSIX shell command.
  *
@@ -33,7 +35,7 @@ function novamira_shell_quote(string $value): string
 function novamira_resolve_path($path, $must_exist = false)
 {
     // Prepend ABSPATH to relative paths.
-    if (!str_starts_with($path, '/') && !str_starts_with($path, '\\')) {
+    if (!novamira_path_is_absolute($path)) {
         $path = ABSPATH . $path;
     }
 
@@ -78,6 +80,21 @@ function novamira_resolve_path($path, $must_exist = false)
     }
 
     return $resolved;
+}
+
+/**
+ * Check whether a path is absolute on POSIX or Windows.
+ *
+ * Recognises a leading slash or backslash (which covers UNC paths) and Windows drive paths with either separator
+ * (C:\ or C:/). WordPress core's path_is_absolute() only recognises C:\.
+ */
+function novamira_path_is_absolute(string $path): bool
+{
+    return (
+        str_starts_with($path, '/')
+        || str_starts_with($path, '\\')
+        || preg_match('#^[A-Za-z]:[\\\\/]#', $path) === 1
+    );
 }
 
 /**
@@ -133,8 +150,12 @@ function novamira_normalize_missing_path(string $path): string
  */
 function novamira_normalize_absolute_path(string $path): string
 {
-    $path = str_replace(search: '\\', replace: DIRECTORY_SEPARATOR, subject: $path);
-    $is_absolute = str_starts_with($path, DIRECTORY_SEPARATOR);
+    $path = str_replace(search: ['\\', '/'], replace: DIRECTORY_SEPARATOR, subject: $path);
+
+    // Keep the root apart so ".." cannot climb above it.
+    $root = novamira_path_root($path);
+    $path = substr($path, offset: strlen($root));
+
     /** @var list<string> $parts */
     $parts = [];
 
@@ -151,12 +172,27 @@ function novamira_normalize_absolute_path(string $path): string
         $parts[] = $segment;
     }
 
-    $normalized = implode(DIRECTORY_SEPARATOR, $parts);
-    if ($is_absolute) {
-        return DIRECTORY_SEPARATOR . $normalized;
-    }
+    $normalized = $root . implode(DIRECTORY_SEPARATOR, $parts);
 
     return $normalized === '' ? '.' : $normalized;
+}
+
+/**
+ * Get the root of a path with DIRECTORY_SEPARATOR separators: "/", a UNC "\\" on Windows, or a drive such as "C:\".
+ */
+function novamira_path_root(string $path): string
+{
+    if (DIRECTORY_SEPARATOR === '\\' && str_starts_with($path, '\\\\')) {
+        return '\\\\';
+    }
+
+    if (preg_match('#^[A-Za-z]:#', $path) === 1) {
+        $drive = substr($path, offset: 0, length: 2);
+
+        return str_starts_with(substr($path, offset: 2), DIRECTORY_SEPARATOR) ? $drive . DIRECTORY_SEPARATOR : $drive;
+    }
+
+    return str_starts_with($path, DIRECTORY_SEPARATOR) ? DIRECTORY_SEPARATOR : '';
 }
 
 /**
@@ -926,6 +962,12 @@ function novamira_update_ability_rules(array $rules): void
     update_option('novamira_ability_rules', $clean, autoload: false);
 }
 
+/** Whether the Abilities Hub holds a rule that turns an ability off, registered or not. */
+function novamira_ability_has_disabled_rule(string $ability_name): bool
+{
+    return (novamira_get_ability_rules()[$ability_name]['disabled'] ?? false) === true;
+}
+
 function novamira_is_valid_ability_name(string $ability_name): bool
 {
     return preg_match('/^[a-z0-9-]+\/[a-z0-9-\/]+$/', $ability_name) === 1;
@@ -949,6 +991,18 @@ function novamira_ability_can_be_managed_individually(string $ability_name): boo
 {
     $ability = function_exists('wp_get_ability') ? wp_get_ability($ability_name) : null;
     $category = $ability instanceof WP_Ability ? $ability->get_category() : '';
+
+    // While read mode is on the Abilities Hub lists only read abilities, and each one it does not require
+    // can be turned off and on by itself, whatever feature owns it: the Features screen is locked then. A rule
+    // that turns an ability off can always be removed, because the request that removes it no longer finds the
+    // ability in the registry. Removing a rule allows nothing: read mode refuses what is not on its list.
+    if (novamira_is_read_mode()) {
+        return (
+            novamira_read_mode_ability_is_choosable($ability_name)
+            && \Novamira\Features\features()->is_ability_active($ability_name, $category)
+            || novamira_ability_has_disabled_rule($ability_name)
+        );
+    }
 
     return \Novamira\Features\features()->feature_for_ability($ability_name, $category) === null;
 }
@@ -977,6 +1031,12 @@ function novamira_apply_ability_policy(): void
 {
     if (!function_exists('wp_get_abilities') || !function_exists('wp_unregister_ability')) {
         return;
+    }
+
+    // Read mode is enforced on every request, the management screens included: the screen check
+    // only reads a query argument, which any admin-ajax.php or admin-post.php request can carry.
+    if (novamira_is_read_mode()) {
+        novamira_apply_read_mode_policy();
     }
 
     // The Hub screen lists disabled abilities with their full metadata, so do not
@@ -1008,7 +1068,11 @@ function novamira_apply_ability_policy_rule(WP_Ability $ability, array $rules): 
         return;
     }
 
-    if ($rule['disabled'] && \Novamira\Features\features()->feature_for_ability($ability_name, $category) === null) {
+    // Read mode lets each read ability it does not require be turned off by itself, whatever feature owns it.
+    $turnable_off = novamira_is_read_mode()
+        ? !novamira_read_mode_is_mandatory_ability($ability_name)
+        : \Novamira\Features\features()->feature_for_ability($ability_name, $category) === null;
+    if ($rule['disabled'] && $turnable_off) {
         wp_unregister_ability($ability_name);
     }
 }
@@ -1312,6 +1376,11 @@ function novamira_build_building_context_lines(): array
  */
 function novamira_build_server_instructions()
 {
+    // In read mode agents get read-mode guidance only, without the environment or building guidance.
+    if (novamira_is_read_mode()) {
+        return novamira_read_mode_instructions();
+    }
+
     $current_user = wp_get_current_user();
     $lines = [
         'Novamira gives you unrestricted control over this WordPress installation.',
@@ -1358,6 +1427,11 @@ function novamira_build_server_instructions()
         }
     }
 
+    $php_notice_lines = novamira_php_version_notice_lines();
+    if ($php_notice_lines !== []) {
+        $lines = array_merge($lines, $php_notice_lines, ['']);
+    }
+
     $lines = array_merge($lines, [
         '## WordPress-native development',
         '',
@@ -1386,6 +1460,27 @@ function novamira_build_server_instructions()
     $lines = array_merge($lines, novamira_build_building_context_lines());
 
     return implode("\n", $lines);
+}
+
+/**
+ * The agent instructions as Novamira's agent-facing surfaces send them (agent-context,
+ * discover-abilities, Chat): the server instructions passed through the
+ * novamira_discover_abilities_instructions filter, which adds the skill catalog, the administrator's
+ * Context, and extensions' guidance. In read mode the filter is not applied. Connection guidance
+ * is included in either mode only for the MCP request that needs it.
+ */
+function novamira_agent_instructions(): string
+{
+    $instructions = novamira_build_server_instructions();
+    if (!novamira_is_read_mode()) {
+        $instructions = (string) apply_filters('novamira_discover_abilities_instructions', $instructions);
+    }
+
+    $connection_notice = function_exists('novamira_legacy_mcp_connection_notice')
+        ? novamira_legacy_mcp_connection_notice()
+        : '';
+
+    return $connection_notice === '' ? $instructions : $connection_notice . "\n\n" . $instructions;
 }
 
 /**

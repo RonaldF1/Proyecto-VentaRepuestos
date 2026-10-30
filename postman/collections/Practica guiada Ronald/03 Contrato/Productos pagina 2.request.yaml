@@ -1,0 +1,21 @@
+$kind: http-request
+url: "{{base_url}}/productos?pagina=2&por_pagina=5"
+method: GET
+queryParams:
+  pagina: "2"
+  por_pagina: "5"
+scripts:
+  - type: afterResponse
+    code: |+
+      pm.test('Responde 200', function () {
+       pm.response.to.have.status(200);
+      });
+      pm.test('C2 · Respeta pagina y por_pagina', function () {
+       const r = pm.response.json();
+       pm.expect(r.meta.pagina).to.eql(2);
+       pm.expect(r.meta.por_pagina).to.eql(5);
+       pm.expect(r.datos.length).to.be.at.most(5);
+      });
+
+    language: text/javascript
+order: 1000

@@ -1,0 +1,126 @@
+$kind: http-example
+name: Se superó el límite de peticiones. Solo desde el Proyecto Integrador (contrato C3).
+request:
+  url: "{{baseUrl}}/bitacora?pagina=1&por_pagina=15&sistema=conector&estado=exito&direccion=entrante&correlacion=string&desde=1963-02-04T06:45:23.884Z&hasta=1963-02-04T06:45:23.884Z"
+  method: GET
+  headers:
+    Accept: application/json
+  queryParams:
+    - key: pagina
+      value: "1"
+      disabled: false
+      description: Número de página (contrato C2).
+    - key: por_pagina
+      value: "15"
+      disabled: false
+      description: Elementos por página, máximo 100 (contrato C2).
+    - key: sistema
+      value: conector
+      disabled: false
+      description: ""
+    - key: estado
+      value: exito
+      disabled: false
+      description: ""
+    - key: direccion
+      value: entrante
+      disabled: false
+      description: ""
+    - key: correlacion
+      value: string
+      disabled: false
+      description: Identificador de correlación exacto (el de la entrega o el del pedido).
+    - key: desde
+      value: 1963-02-04T06:45:23.884Z
+      disabled: false
+      description: Fecha y hora mínima, ISO 8601.
+    - key: hasta
+      value: 1963-02-04T06:45:23.884Z
+      disabled: false
+      description: Fecha y hora máxima, ISO 8601.
+  body:
+    type: text
+    content: ""
+response:
+  statusCode: 429
+  statusText: Too Many Requests
+  headers:
+    - key: Content-Type
+      value: application/json
+    - key: Retry-After
+      value: "7328"
+      disabled: false
+      description: Segundos que hay que esperar antes de reintentar.
+      $type: |-
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        }
+  body:
+    type: json
+    content: |-
+      {
+        "error": {
+          "codigo": "limite_excedido",
+          "mensaje": "Demasiadas peticiones. Intente de nuevo en 30 segundos.",
+          "detalles": []
+        }
+      }
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "codigo": {
+                "type": "string",
+                "enum": [
+                  "solicitud_invalida",
+                  "no_autenticado",
+                  "prohibido",
+                  "no_encontrado",
+                  "validacion",
+                  "limite_excedido",
+                  "error_interno"
+                ]
+              },
+              "mensaje": {
+                "type": "string"
+              },
+              "detalles": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "campo": {
+                      "type": "string"
+                    },
+                    "mensaje": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "campo",
+                    "mensaje"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "codigo",
+              "mensaje",
+              "detalles"
+            ]
+          }
+        },
+        "required": [
+          "error"
+        ]
+      }
+order: 4000

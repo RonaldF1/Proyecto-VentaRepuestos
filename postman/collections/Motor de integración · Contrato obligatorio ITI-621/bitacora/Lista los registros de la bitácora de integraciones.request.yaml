@@ -1,0 +1,141 @@
+$kind: http-request
+description: Del más reciente al más antiguo (contrato C6). Los filtros se combinan con «y».
+url: "{{baseUrl}}/bitacora?pagina=1&por_pagina=15&sistema=conector&estado=exito&direccion=entrante&correlacion=string&desde=1963-02-04T06:45:23.884Z&hasta=1963-02-04T06:45:23.884Z"
+method: GET
+headers:
+  Accept: application/json
+queryParams:
+  - key: pagina
+    value: "1"
+    disabled: false
+    description: Número de página (contrato C2).
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "integer",
+            "default": 1,
+            "minimum": 1
+          }
+        }
+      }
+  - key: por_pagina
+    value: "15"
+    disabled: false
+    description: Elementos por página, máximo 100 (contrato C2).
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "integer",
+            "default": 15,
+            "minimum": 1,
+            "maximum": 100
+          }
+        }
+      }
+  - key: sistema
+    value: conector
+    disabled: false
+    description: ""
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "enum": [
+              "tienda",
+              "conector",
+              "ia",
+              "heredado"
+            ]
+          }
+        }
+      }
+  - key: estado
+    value: exito
+    disabled: false
+    description: ""
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "enum": [
+              "exito",
+              "fallo",
+              "duplicado",
+              "firma_invalida"
+            ]
+          }
+        }
+      }
+  - key: direccion
+    value: entrante
+    disabled: false
+    description: ""
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "enum": [
+              "entrante",
+              "saliente"
+            ]
+          }
+        }
+      }
+  - key: correlacion
+    value: string
+    disabled: false
+    description: Identificador de correlación exacto (el de la entrega o el del pedido).
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "maxLength": 100
+          }
+        }
+      }
+  - key: desde
+    value: 1963-02-04T06:45:23.884Z
+    disabled: false
+    description: Fecha y hora mínima, ISO 8601.
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+  - key: hasta
+    value: 1963-02-04T06:45:23.884Z
+    disabled: false
+    description: Fecha y hora máxima, ISO 8601.
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+body:
+  type: text
+  content: ""
+settings: {}
+examples: ./.resources/Lista los registros de la bitácora de integraciones.resources/examples
+order: 1000

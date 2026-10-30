@@ -1,0 +1,2 @@
+2026-10-16T22:27:12+00:00 DEBUG #7893 - [New Request] POST /
+2026-10-16T22:27:12+00:00 ERROR #7893 - SDK v6 client token runtime error: Cannot request a PayPal client token without a client ID and secret.

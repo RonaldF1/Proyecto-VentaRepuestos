@@ -1,0 +1,21 @@
+$kind: http-request
+url: "{{url_tienda}}/wp-json/wc/v3/products/{{producto_id}}"
+method: PUT
+body:
+  type: json
+  content: "{\r
+
+    \  \"meta_data\": [\r
+
+    \    {\r
+
+    \      \"key\": \"modelo_vehiculo\",\r
+
+    \      \"value\": \"Toyota Hilux 2026\"\r
+
+    \    }\r
+
+    \  ]\r
+
+    }"
+order: 4000

@@ -1,0 +1,42 @@
+$kind: http-request
+url: "{{tienda_url}}/wp-json/wc/v3/products/{{producto_id}}"
+method: GET
+scripts:
+  - type: afterResponse
+    code: "const esquemaProducto = {\r
+
+      \ type: 'object',\r
+
+      \ required: ['id', 'name', 'sku', 'price', 'stock_quantity'],\r
+
+      \ properties: {\r
+
+      \ id: { type: 'integer' },\r
+
+      \ name: { type: 'string' },\r
+
+      \ sku: { type: 'string' },\r
+
+      \ price: { type: 'string' },\r
+
+      \ stock_quantity: { type: ['integer', 'null'] }\r
+
+      \ }\r
+
+      };\r
+
+      pm.test('Cumple el esquema del producto', function () {\r
+
+      \ pm.response.to.have.jsonSchema(esquemaProducto);\r
+
+      });\r
+
+      pm.test('Trae el campo propio del plugin', function () {\r
+
+      \ const campo = pm.environment.get('campo_propio');\r
+
+      \ pm.expect(pm.response.json()).to.have.property(campo);\r
+
+      });"
+    language: text/javascript
+order: 3000

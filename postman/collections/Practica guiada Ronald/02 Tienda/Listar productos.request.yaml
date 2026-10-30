@@ -1,0 +1,37 @@
+$kind: http-request
+url: "{{tienda_url}}/wp-json/wc/v3/products?per_page=5&page=1"
+method: GET
+queryParams:
+  per_page: "5"
+  page: "1"
+scripts:
+  - type: afterResponse
+    code: "const productos = pm.response.json();\r
+
+      pm.environment.set('producto_id', productos[0].id);\r
+
+      pm.test('Responde 200', function () {\r
+
+      \ pm.response.to.have.status(200);\r
+
+      });\r
+
+      pm.test('Trae la cabecera X-WP-TotalPages', function () {\r
+
+      \ pm.response.to.have.header('X-WP-TotalPages');\r
+
+      });\r
+
+      pm.test('Devuelve como máximo 5 productos', function () {\r
+
+      \ pm.expect(pm.response.json().length).to.be.at.most(5);\r
+
+      });\r
+
+      pm.test('Responde en menos de 3 s', function () {\r
+
+      \ pm.expect(pm.response.responseTime).to.be.below(3000);\r
+
+      });\r\n"
+    language: text/javascript
+order: 2000

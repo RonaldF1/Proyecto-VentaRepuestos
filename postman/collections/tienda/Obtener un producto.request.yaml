@@ -1,0 +1,4 @@
+$kind: http-request
+url: "{{url_tienda}}/wp-json/wc/v3/products/{{producto_id}}"
+method: GET
+order: 2000

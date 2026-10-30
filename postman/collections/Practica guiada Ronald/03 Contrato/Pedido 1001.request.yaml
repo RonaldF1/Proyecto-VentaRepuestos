@@ -1,0 +1,28 @@
+$kind: http-request
+url: "{{base_url}}/pedidos/1001"
+method: GET
+scripts:
+  - type: afterResponse
+    code: "const esquema = JSON.parse(pm.collectionVariables.get('esquema_direccion'));\r
+
+      const pedido = pm.response.json();\r
+
+      pm.test('Responde 200', function () {\r
+
+      \ pm.response.to.have.status(200);\r
+
+      });\r
+
+      pm.test('C7 · La dirección normalizada cumple el esquema', function () {\r
+
+      \ pm.expect(pedido.direccion.normalizada).to.have.jsonSchema(esquema);\r
+
+      });\r
+
+      pm.test('C8 · No trae el teléfono del cliente', function () {\r
+
+      \ pm.expect(pedido).to.not.have.property('telefono');\r
+
+      });"
+    language: text/javascript
+order: 3000

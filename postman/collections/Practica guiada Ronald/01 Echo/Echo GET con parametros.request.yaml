@@ -1,0 +1,8 @@
+$kind: http-request
+description: ""
+url: "{{echo_url}}/get?giro=cafeteria&ciudad=Quesada"
+method: GET
+queryParams:
+  giro: cafeteria
+  ciudad: Quesada
+order: 1000

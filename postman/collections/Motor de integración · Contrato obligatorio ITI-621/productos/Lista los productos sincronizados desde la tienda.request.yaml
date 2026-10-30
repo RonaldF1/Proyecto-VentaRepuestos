@@ -1,0 +1,58 @@
+$kind: http-request
+description: Responde desde la base de datos del motor (contrato C4), ordenados por id ascendente.
+url: "{{baseUrl}}/productos?pagina=1&por_pagina=15&sku=string"
+method: GET
+headers:
+  Accept: application/json
+queryParams:
+  - key: pagina
+    value: "1"
+    disabled: false
+    description: Número de página (contrato C2).
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "integer",
+            "default": 1,
+            "minimum": 1
+          }
+        }
+      }
+  - key: por_pagina
+    value: "15"
+    disabled: false
+    description: Elementos por página, máximo 100 (contrato C2).
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "integer",
+            "default": 15,
+            "minimum": 1,
+            "maximum": 100
+          }
+        }
+      }
+  - key: sku
+    value: string
+    disabled: false
+    description: Filtra por SKU exacto.
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "maxLength": 100
+          }
+        }
+      }
+body:
+  type: text
+  content: ""
+settings: {}
+examples: ./.resources/Lista los productos sincronizados desde la tienda.resources/examples
+order: 1000

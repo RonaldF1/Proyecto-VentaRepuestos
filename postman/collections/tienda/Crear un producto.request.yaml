@@ -1,0 +1,23 @@
+$kind: http-request
+url: "{{url_tienda}}/wp-json/wc/v3/products"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"name\": \"Filtro de Aceite Prueba API\",\r
+
+    \  \"type\": \"simple\",\r
+
+    \  \"regular_price\": \"5000\",\r
+
+    \  \"description\": \"Filtro de prueba creado desde Postman\",\r
+
+    \  \"short_description\": \"Filtro de aceite genérico\",\r
+
+    \  \"manage_stock\": true,\r
+
+    \  \"stock_quantity\": 10\r
+
+    }"
+order: 3000

@@ -1,0 +1,41 @@
+$kind: collection
+description: |
+  Contrato obligatorio de la API del motor de integración del curso ITI-621
+  Tecnologías y Sistemas Web III (UTN, Sede San Carlos, III cuatrimestre 2026).
+  Se publica el martes 20 de octubre de 2026 y no se modifica: si encuentran un
+  error, avisen al docente y la corrección se publica para todos a la vez.
+
+  Cada equipo copia este contrato sin cambios en motor/openapi.yaml y documenta
+  ahí sus endpoints adicionales (por ejemplo, el webhook de WooCommerce).
+
+  Secciones del contrato (se citan como «contrato C1», «contrato C2»…):
+
+  - C1 Rutas y formato. Todas las rutas están bajo /api/v1. Toda respuesta,
+    incluidos los errores, es JSON con Content-Type application/json. Fechas en
+    ISO 8601 con zona horaria; montos en colones, enteros; nombres de campos en
+    español y en snake_case.
+  - C2 Paginación. Todo listado recibe pagina (entero ≥ 1, por defecto 1) y
+    por_pagina (entero de 1 a 100, por defecto 15), y responde con datos, meta y
+    enlaces. Un valor fuera de rango responde 422; una página sin resultados
+    responde 200 con datos vacío.
+  - C3 Formato único de error. Todo error (400, 401, 403, 404, 422, 429 y 500)
+    responde con el objeto Error. Ninguna respuesta incluye trazas, nombres de
+    archivo, líneas ni clases internas.
+  - C4 Productos. GET /productos responde desde la base de datos del motor, sin
+    consultar la tienda en cada petición, e incluye el campo propio del plugin.
+  - C5 Pedidos. GET /pedidos/{id} responde un pedido recibido por webhook, con el
+    estado de su dirección y el resultado del conector.
+  - C6 Bitácora. GET /bitacora responde los registros de integración, del más
+    reciente al más antiguo, con los filtros definidos.
+  - C7 Dirección normalizada. La salida del modelo cumple el esquema
+    DireccionNormalizada antes de guardarse; con confianza menor que 0,85 la
+    dirección queda pendiente de revisión.
+  - C8 Datos que no se exponen. Ninguna respuesta incluye nombre, correo ni
+    teléfono del cliente, llaves, secretos, firmas ni cuerpos completos de
+    peticiones.
+variables:
+  baseUrl: http://127.0.0.1:8000/api/v1
+auth:
+  - id: ""
+    type: noauth
+    name: No Auth

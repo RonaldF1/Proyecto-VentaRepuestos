@@ -1,0 +1,13 @@
+name: Tienda
+values:
+  - key: tienda_url
+    value: 'https://rdc-repuestos.local'
+  - key: ck
+    secret: true
+  - key: cs
+    secret: true
+  - key: campo_propio
+    value: ''
+  - key: producto_id
+    value: ''
+color: 120
