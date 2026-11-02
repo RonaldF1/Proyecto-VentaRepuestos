@@ -4,9 +4,12 @@ namespace Tests\Feature;
 
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
+use Tests\Support\RefreshDatabaseAsOwner;
+
 
 class DatabaseRolesTest extends TestCase
 {
+    use RefreshDatabaseAsOwner;
     public function test_application_role_has_no_elevated_privileges(): void
     {
         $role = DB::selectOne("
