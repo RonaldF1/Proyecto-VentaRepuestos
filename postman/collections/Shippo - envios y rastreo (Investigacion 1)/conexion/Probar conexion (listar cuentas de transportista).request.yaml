@@ -1,0 +1,9 @@
+$kind: http-request
+description: Consulta de solo lectura. Verificar que responde 200 con el token de PRUEBA (shippo_test_...).
+url: "{{base_url}}/carrier_accounts"
+method: GET
+scripts:
+  - type: afterResponse
+    code: "pm.test('Estado 200: la credencial funciona', function () { pm.response.to.have.status(200); });"
+    language: text/javascript
+order: 1000

@@ -1,0 +1,17 @@
+$kind: collection
+description: "Spike de Shippo. Carpetas: conexion, accion y errores (autenticacion no aplica: el token va en el encabezado Authorization de cada peticion)."
+variables:
+  - key: auth_secret_0lsq
+    secret: true
+    disabled: false
+  - key: auth_secret_0cn9
+    secret: true
+    disabled: false
+auth:
+  - id: 308af138-593c-4982-941e-564d330fdb9c
+    type: apikey
+    name: apikey auth
+    credentials:
+      key: Authorization
+      value: "{{auth_secret_0lsq}}"
+      in: header

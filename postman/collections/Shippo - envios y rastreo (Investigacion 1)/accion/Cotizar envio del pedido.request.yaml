@@ -1,0 +1,36 @@
+$kind: http-request
+description: "Acción del spike: cotizar el envío del pedido de prueba. Unidades Shippo: cm y kg. async=false devuelve las tarifas en la misma respuesta."
+url: "{{base_url}}/shipments"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "address_from": {"name": "{{origen_nombre}}", "street1": "{{origen_calle}}", "city": "{{origen_ciudad}}", "state": "{{origen_estado}}", "zip": "{{origen_cp}}", "country": "{{origen_pais}}", "phone": "{{origen_telefono}}"},
+      "address_to": {"name": "{{cliente_nombre}}", "street1": "{{cliente_calle}}", "city": "{{cliente_ciudad}}", "state": "{{cliente_estado}}", "zip": "{{cliente_cp}}", "country": "{{cliente_pais}}", "phone": "{{cliente_telefono}}"},
+      "parcels": [{"length": {{paquete_largo_cm}}, "width": {{paquete_ancho_cm}}, "height": {{paquete_alto_cm}}, "distance_unit": "cm", "weight": {{paquete_peso_kg}}, "mass_unit": "kg"}],
+      "metadata": "{{pedido_numero}}",
+      "async": false
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Estado 201: el shipment se creo', function () { pm.response.to.have.status(201); });
+      pm.test('La respuesta trae tarifas con precio y tiempo de entrega', function () {
+        const j = pm.response.json();
+        pm.expect(j.rates, 'rates').to.be.an('array').that.is.not.empty;
+        pm.expect(j.rates[0]).to.have.property('amount');
+        pm.expect(j.rates[0]).to.have.property('currency');
+        pm.expect(j.rates.some(function (r) { return r.estimated_days !== null && r.estimated_days !== undefined; }),
+          'al menos una tarifa con estimated_days').to.be.true;
+      });
+      // Para el efecto visible: anote en consola el shipment y la tarifa mas barata
+      const j = pm.response.json();
+      if (j.rates && j.rates.length) {
+        const min = j.rates.reduce(function (a, b) { return parseFloat(a.amount) <= parseFloat(b.amount) ? a : b; });
+        console.log('shipment', j.object_id, '| tarifa', min.provider, min.servicelevel && min.servicelevel.name, min.amount, min.currency, '| dias', min.estimated_days);
+      }
+    language: text/javascript
+order: 1000

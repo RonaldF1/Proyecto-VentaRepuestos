@@ -1,0 +1,135 @@
+{
+  "id": "86951be2-04ea-418f-a71c-5d74a07408d0",
+  "name": "Shippo (ejemplo)",
+  "_postman_variable_scope": "environment",
+  "_postman_exported_at": "2026-11-09T19:13:57.504Z",
+  "_postman_exported_using": "Postman/Agent",
+  "values": [
+    {
+      "key": "shippo_token",
+      "value": "key aqui ",
+      "type": "secret",
+      "enabled": true
+    },
+    {
+      "key": "base_url",
+      "value": "https://api.goshippo.com",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "origen_nombre",
+      "value": "RDC Repuestos",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "origen_calle",
+      "value": "Calle Central, Avenida 1",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "origen_ciudad",
+      "value": "Alajuela",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "origen_estado",
+      "value": "CA",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "origen_cp",
+      "value": "94107",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "origen_pais",
+      "value": "US",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "origen_telefono",
+      "value": "+50622221111",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "cliente_nombre",
+      "value": "Cliente de Prueba",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "cliente_calle",
+      "value": "Avenida 3, Calle 5",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "cliente_ciudad",
+      "value": "Heredia",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "cliente_estado",
+      "value": "NY",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "cliente_cp",
+      "value": "10001",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "cliente_pais",
+      "value": "US",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "cliente_telefono",
+      "value": "+50688882222",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "pedido_numero",
+      "value": "RDC-TEST-001",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "paquete_largo_cm",
+      "value": "20",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "paquete_ancho_cm",
+      "value": "15",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "paquete_alto_cm",
+      "value": "10",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "paquete_peso_kg",
+      "value": "1.5",
+      "type": "default",
+      "enabled": true
+    }
+  ]
+}

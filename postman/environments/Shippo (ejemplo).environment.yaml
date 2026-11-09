@@ -1,0 +1,44 @@
+name: Shippo (ejemplo)
+values:
+  - key: shippo_token
+    value: ''
+  - key: base_url
+    value: ''
+  - key: origen_nombre
+    value: ''
+  - key: origen_calle
+    value: ''
+  - key: origen_ciudad
+    value: ''
+  - key: origen_estado
+    value: ''
+  - key: origen_cp
+    value: ''
+  - key: origen_pais
+    value: ''
+  - key: origen_telefono
+    value: ''
+  - key: cliente_nombre
+    value: ''
+  - key: cliente_calle
+    value: ''
+  - key: cliente_ciudad
+    value: ''
+  - key: cliente_estado
+    value: ''
+  - key: cliente_cp
+    value: ''
+  - key: cliente_pais
+    value: ''
+  - key: cliente_telefono
+    value: ''
+  - key: pedido_numero
+    value: ''
+  - key: paquete_largo_cm
+    value: ''
+  - key: paquete_ancho_cm
+    value: ''
+  - key: paquete_alto_cm
+    value: ''
+  - key: paquete_peso_kg
+    value: ''

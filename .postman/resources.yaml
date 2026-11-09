@@ -11,3 +11,7 @@ resourceNameMappings:
   specs:
     - ../postman/specs/Motor de integración · Contrato obligatorio ITI-621/openapi.yaml: Motor de integración · Contrato obligatorio ITI-621
     - ../postman/specs/practica-guiada.postman_collection.json/practica-guiada.postman_collection.json.json: practica-guiada.postman_collection.json
+
+cloudResources:
+  collections:
+    ../postman/collections/Shippo - envios y rastreo (Investigacion 1): 45006910-5db4-46f2-88ed-d1c15080e029

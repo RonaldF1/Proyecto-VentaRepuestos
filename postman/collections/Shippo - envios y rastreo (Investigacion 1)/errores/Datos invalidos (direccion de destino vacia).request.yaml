@@ -1,0 +1,22 @@
+$kind: http-request
+url: "{{base_url}}/shipments"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "address_from": {"name": "{{origen_nombre}}", "street1": "{{origen_calle}}", "city": "{{origen_ciudad}}", "state": "{{origen_estado}}", "zip": "{{origen_cp}}", "country": "{{origen_pais}}", "phone": "{{origen_telefono}}"},
+      "address_to": {"name": "", "street1": "", "city": "", "state": "", "zip": "", "country": ""},
+      "parcels": [{"length": {{paquete_largo_cm}}, "width": {{paquete_ancho_cm}}, "height": {{paquete_alto_cm}}, "distance_unit": "cm", "weight": {{paquete_peso_kg}}, "mass_unit": "kg"}],
+      "async": false
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      // Ajuste el codigo esperado a lo que REALMENTE observe (el enunciado pide el codigo observado).
+      pm.test('Estado de error por datos invalidos (400 o 422)', function () { pm.expect(pm.response.code).to.be.oneOf([400, 422]); });
+      console.log('Codigo:', pm.response.code, '| cuerpo:', pm.response.text());
+    language: text/javascript
+order: 2000
