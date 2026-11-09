@@ -1,0 +1,149 @@
+{
+    "id": 99,
+    "parent_id": 0,
+    "status": "pending",
+    "currency": "CRC",
+    "version": "11.2.1",
+    "prices_include_tax": false,
+    "date_created": "2026-11-09T21:20:31",
+    "date_modified": "2026-11-09T22:58:33",
+    "discount_total": "0",
+    "discount_tax": "0",
+    "shipping_total": "0",
+    "shipping_tax": "0",
+    "cart_tax": "0",
+    "total": "11000",
+    "total_tax": "0",
+    "customer_id": 0,
+    "order_key": "Redactado",
+    "billing": {
+        "first_name": "carlos",
+        "last_name": "prueba",
+        "company": "",
+        "address_1": "Calle de Prueba 123",
+        "address_2": "",
+        "city": "San José",
+        "state": "CR-SJ",
+        "postcode": "10101",
+        "country": "CR",
+        "email": "cliente.prueba@example.com",
+        "phone": ""
+    },
+    "shipping": {
+        "first_name": "cliente",
+        "last_name": "prueba",
+        "company": "",
+        "address_1": "Avenida 3, Calle 5",
+        "address_2": "",
+        "city": "New York",
+        "state": "NY",
+        "postcode": "10001",
+        "country": "US",
+        "phone": ""
+    },
+    "payment_method": "cod",
+    "payment_method_title": "Contra reembolso",
+    "transaction_id": "",
+    "customer_ip_address": "",
+    "customer_user_agent": "",
+    "created_via": "admin",
+    "customer_note": "",
+    "date_completed": null,
+    "date_paid": null,
+    "cart_hash": "",
+    "number": "99",
+    "meta_data": [
+        {
+            "id": 55,
+            "key": "_wc_order_attribution_source_type",
+            "value": "admin"
+        }
+    ],
+    "line_items": [
+        {
+            "id": 10,
+            "name": "Filtro de aceite para Toyota",
+            "product_id": 17,
+            "variation_id": 0,
+            "quantity": 1,
+            "tax_class": "",
+            "subtotal": "6500",
+            "subtotal_tax": "0",
+            "total": "6500",
+            "total_tax": "0",
+            "taxes": [],
+            "meta_data": [],
+            "sku": "RDC-MOT-001",
+            "global_unique_id": "",
+            "price": 6500,
+            "image": {
+                "id": "18",
+                "src": "https://rcd-repuestos-local-dylan.local/wp-content/uploads/2026/09/Screenshot-2026-09-28-171117.png"
+            },
+            "parent_name": null
+        },
+        {
+            "id": 11,
+            "name": "Bujía de encendido para Toyota",
+            "product_id": 22,
+            "variation_id": 0,
+            "quantity": 1,
+            "tax_class": "",
+            "subtotal": "4500",
+            "subtotal_tax": "0",
+            "total": "4500",
+            "total_tax": "0",
+            "taxes": [],
+            "meta_data": [],
+            "sku": "RDC-MOT-003",
+            "global_unique_id": "",
+            "price": 4500,
+            "image": {
+                "id": "23",
+                "src": "https://rcd-repuestos-local-dylan.local/wp-content/uploads/2026/09/Screenshot-2026-09-28-173038.png"
+            },
+            "parent_name": null
+        }
+    ],
+    "tax_lines": [],
+    "shipping_lines": [],
+    "fee_lines": [],
+    "coupon_lines": [],
+    "refunds": [],
+    "payment_url": "Redactado",
+    "is_editable": true,
+    "needs_payment": true,
+    "needs_processing": true,
+    "date_created_gmt": "2026-11-09T21:20:31",
+    "date_modified_gmt": "2026-11-09T22:58:33",
+    "date_completed_gmt": null,
+    "date_paid_gmt": null,
+    "currency_symbol": "₡",
+    "_links": {
+        "self": [
+            {
+                "href": "https://rcd-repuestos-local-dylan.local/wp-json/wc/v3/orders/99",
+                "targetHints": {
+                    "allow": [
+                        "GET",
+                        "POST",
+                        "PUT",
+                        "PATCH",
+                        "DELETE"
+                    ]
+                }
+            }
+        ],
+        "collection": [
+            {
+                "href": "https://rcd-repuestos-local-dylan.local/wp-json/wc/v3/orders"
+            }
+        ],
+        "email_templates": [
+            {
+                "embeddable": true,
+                "href": "https://rcd-repuestos-local-dylan.local/wp-json/wc/v3/orders/99/actions/email_templates"
+            }
+        ]
+    }
+}
