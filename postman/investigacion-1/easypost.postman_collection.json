@@ -1,0 +1,30 @@
+{
+  "info": {
+    "name": "EasyPost - Investigacion 1",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "conexion",
+      "item": [
+        {
+          "name": "Test Connection",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{api_key}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/addresses",
+              "host": ["{{base_url}}"],
+              "path": ["addresses"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
