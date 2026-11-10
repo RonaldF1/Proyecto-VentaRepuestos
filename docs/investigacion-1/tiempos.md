@@ -11,11 +11,11 @@ Postman y Newman.
 
 | Métrica | EasyPost | Shippo |
 |---|---:|---:|
-| Iteraciones | 10 | 10 |
-| Tiempo promedio | 208 ms | 411 ms |
-| Tiempo mínimo | 143 ms | 97 ms |
-| Tiempo máximo | 473 ms | 1524 ms |
-| Fallos reportados | 0 | 0 |
+| Iteraciones       | 10     | 10      |
+| Tiempo promedio   | 208 ms | 411 ms  |
+| Tiempo mínimo     | 143 ms | 97 ms   |
+| Tiempo máximo     | 473 ms | 1524 ms |
+| Fallos reportados | 0      | 0       |
 
 ## Análisis de resultados
 
