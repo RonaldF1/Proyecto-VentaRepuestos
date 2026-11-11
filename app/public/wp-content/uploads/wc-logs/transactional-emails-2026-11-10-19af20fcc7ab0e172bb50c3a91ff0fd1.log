@@ -1,0 +1,2 @@
+2026-11-10T21:36:04+00:00 INFO Email "new_order" for order #101 sent CONTEXT: {"email_type":"new_order","status":"sent","recipient":"Ronald","order":101}
+2026-11-10T21:36:04+00:00 INFO Email "customer_on_hold_order" for order #101 sent CONTEXT: {"email_type":"customer_on_hold_order","status":"sent","recipient":"guest","order":101}

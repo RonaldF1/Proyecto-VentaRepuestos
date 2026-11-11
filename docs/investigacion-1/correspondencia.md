@@ -1,7 +1,7 @@
 # Correspondencia con la interfaz común: Shippo
 
 Este documento describe **solo al proveedor elegido** y es el puente hacia el código del Avance 2 (módulo del conector en Laravel).
-
+ 
 
 ## 1. Peticiones que usa cada operación de la interfaz
 
