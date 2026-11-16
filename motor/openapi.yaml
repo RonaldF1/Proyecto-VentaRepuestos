@@ -195,6 +195,45 @@ paths:
           $ref: '#/components/responses/LimiteExcedido'
         '500':
           $ref: '#/components/responses/ErrorInterno'
+/webhooks/woocommerce:
+    post:
+      tags: [Pedidos]
+      operationId: recibirWebhookWoocommerce
+      summary: Recibe eventos de pedidos desde WooCommerce
+      description: Valida la firma HMAC-SHA256, garantiza idempotencia por X-WC-Webhook-Delivery-ID y encola el procesamiento asíncrono (normalización con IA y conector logístico).
+      security: []
+      parameters:
+        - name: X-WC-Webhook-Signature
+          in: header
+          required: true
+          description: Firma HMAC-SHA256 en Base64 calculada sobre el cuerpo crudo de la petición.
+          schema:
+            type: string
+        - name: X-WC-Webhook-Delivery-ID
+          in: header
+          required: true
+          description: Identificador único de entrega de WooCommerce para garantizar idempotencia.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Entrega duplicada ya procesada o ping de verificación activo.
+        '202':
+          description: Webhook válido aceptado y encolado para procesamiento asíncrono.
+        '400':
+          $ref: '#/components/responses/ErrorValidacion'
+        '401':
+          $ref: '#/components/responses/NoAutenticado'
+        '422':
+          $ref: '#/components/responses/ErrorValidacion'
+        '500':
+          $ref: '#/components/responses/ErrorInterno'
 components:
   securitySchemes:
     tokenSanctum:
