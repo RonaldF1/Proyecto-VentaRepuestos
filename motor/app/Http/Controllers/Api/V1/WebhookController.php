@@ -36,18 +36,18 @@ class WebhookController extends Controller
                 'intentos' => 1,
                 'duracion_ms' => (int) round((microtime(true) - $inicio) * 1000),
                 'correlacion' => $deliveryId !== '' ? $deliveryId : null,
-                'error' => 'Firma HMAC-SHA256 ausente o invÃ¡lida.',
+                'error' => 'Firma HMAC-SHA256 ausente o inválida.',
             ]);
 
             return $this->errorResponse(
                 'no_autenticado',
-                'La firma del webhook no es vÃ¡lida.',
+                'La firma del webhook no es válida.',
                 [],
                 401
             );
         }
 
-        // Ping inicial de verificaciÃ³n cuando WooCommerce crea/activa el webhook
+        // Ping inicial de verificación cuando WooCommerce crea/activa el webhook
         if ($request->has('webhook_id') && !$request->has('id')) {
             return response()->json([
                 'estado' => 'activo',
@@ -86,7 +86,7 @@ class WebhookController extends Controller
             ], 200);
         }
 
-        // 3. Validar estructura mÃ­nima del payload del pedido
+        // 3. Validar estructura mínima del payload del pedido
         $data = json_decode($rawPayload, true);
         if (!is_array($data) || empty($data['id']) || empty($data['line_items']) || !is_array($data['line_items'])) {
             Bitacora::create([
@@ -104,15 +104,15 @@ class WebhookController extends Controller
 
             return $this->errorResponse(
                 'validacion',
-                'Los datos del pedido no son vÃ¡lidos.',
-                [['campo' => 'payload', 'mensaje' => 'Se requiere id y al menos una lÃ­nea en line_items.']],
+                'Los datos del pedido no son válidos.',
+                [['campo' => 'payload', 'mensaje' => 'Se requiere id y al menos una línea en line_items.']],
                 422
             );
         }
 
         $pedidoId = (int) $data['id'];
 
-        // Mapear lÃ­neas de pedido (montos en enteros, contrato C1/C5)
+        // Mapear líneas de pedido (montos en enteros, contrato C1/C5)
         $lineas = array_map(function ($item) {
             $cantidad = max(1, (int) ($item['quantity'] ?? 1));
             $subtotal = (int) round((float) ($item['subtotal'] ?? $item['total'] ?? 0));
@@ -129,7 +129,7 @@ class WebhookController extends Controller
             ];
         }, $data['line_items']);
 
-        // Extraer direcciÃ³n SIN datos personales (Contrato C8: sin nombre, correo ni telÃ©fono)
+        // Extraer dirección SIN datos personales (Contrato C8: sin nombre, correo ni teléfono)
         $shipping = is_array($data['shipping'] ?? null) ? $data['shipping'] : [];
         $billing = is_array($data['billing'] ?? null) ? $data['billing'] : [];
 
@@ -142,13 +142,13 @@ class WebhookController extends Controller
 
         $direccionTexto = !empty($partesDireccion)
             ? implode(', ', array_map('trim', $partesDireccion))
-            : 'Sin direcciÃ³n especificada';
+            : 'Sin dirección especificada';
 
         $creadoEn = !empty($data['date_created_gmt'])
             ? Carbon::parse($data['date_created_gmt'], 'UTC')->setTimezone('America/Costa_Rica')
             : (!empty($data['date_created']) ? Carbon::parse($data['date_created']) : now());
 
-        // Guardar entrega, pedido y bitÃ¡cora de forma atÃ³mica
+        // Guardar entrega, pedido y bitácora de forma atómica
         DB::transaction(function () use ($deliveryId, $pedidoId, $data, $creadoEn, $lineas, $direccionTexto, $inicio) {
             WebhookEntrega::create([
                 'delivery_id' => $deliveryId,
@@ -186,7 +186,7 @@ class WebhookController extends Controller
             ]);
         });
 
-        // 4. Despachar procesamiento asÃ­ncrono a la cola (Punto 3.3)
+        // 4. Despachar procesamiento asíncrono a la cola (Punto 3.3)
         ProcesarPedidoWebhookJob::dispatch($pedidoId);
 
         return response()->json([
