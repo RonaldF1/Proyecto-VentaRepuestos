@@ -9,17 +9,17 @@ use Throwable;
 class NormalizadorDireccionService
 {
     private const PROVINCIAS_VALIDAS = [
-        'San José',
+        'San JosÃƒÆ’Ã‚Â©',
         'Alajuela',
         'Cartago',
         'Heredia',
         'Guanacaste',
         'Puntarenas',
-        'Limón',
+        'LimÃƒÆ’Ã‚Â³n',
     ];
 
     /**
-     * Normaliza una dirección libre de Costa Rica y valida contra direccion-normalizada.schema.json.
+     * Normaliza una direcciÃƒÆ’Ã‚Â³n libre de Costa Rica y valida contra direccion-normalizada.schema.json.
      *
      * @return array{estado: string, normalizada: array|null}
      */
@@ -60,7 +60,7 @@ class NormalizadorDireccionService
 
             return [
                 'estado' => $estadoDireccion,
-                'normalizada' => $normalizada,
+                'normalizada' => $estadoDireccion === 'normalizada' ? $normalizada : null,
             ];
         } catch (Throwable $e) {
             Bitacora::create([
@@ -89,21 +89,21 @@ class NormalizadorDireccionService
         $openaiKey = env('OPENAI_API_KEY');
 
         $prompt = <<<PROMPT
-Eres un experto en división territorial administrativa de Costa Rica.
-Normaliza la siguiente dirección de entrega en un JSON estricto que cumpla exactamente este esquema:
+Eres un experto en divisiÃƒÆ’Ã‚Â³n territorial administrativa de Costa Rica.
+Normaliza la siguiente direcciÃƒÆ’Ã‚Â³n de entrega en un JSON estricto que cumpla exactamente este esquema:
 {
-  "provincia": "Una de: San José, Alajuela, Cartago, Heredia, Guanacaste, Puntarenas, Limón",
-  "canton": "Nombre oficial del cantón (1-60 caracteres)",
+  "provincia": "Una de: San JosÃƒÆ’Ã‚Â©, Alajuela, Cartago, Heredia, Guanacaste, Puntarenas, LimÃƒÆ’Ã‚Â³n",
+  "canton": "Nombre oficial del cantÃƒÆ’Ã‚Â³n (1-60 caracteres)",
   "distrito": "Nombre oficial del distrito (1-60 caracteres)",
-  "otras_senas": "Señas exactas limpias sin datos personales como nombre, teléfono o correo (máx 250 caracteres)",
+  "otras_senas": "SeÃƒÆ’Ã‚Â±as exactas limpias sin datos personales como nombre, telÃƒÆ’Ã‚Â©fono o correo (mÃƒÆ’Ã‚Â¡x 250 caracteres)",
   "confianza": 0.95
 }
 Reglas:
-- Devuelve ÚNICAMENTE el objeto JSON válido, sin markdown ni explicaciones.
-- Si la dirección es ambigua, incompleta o falta cantón/distrito claro, asigna una confianza menor a 0.85 (ej. 0.55).
-- Si la dirección tiene provincia, cantón, distrito y señas claras, asigna confianza >= 0.85.
+- Devuelve ÃƒÆ’Ã…Â¡NICAMENTE el objeto JSON vÃƒÆ’Ã‚Â¡lido, sin markdown ni explicaciones.
+- Si la direcciÃƒÆ’Ã‚Â³n es ambigua, incompleta o falta cantÃƒÆ’Ã‚Â³n/distrito claro, asigna una confianza menor a 0.85 (ej. 0.55).
+- Si la direcciÃƒÆ’Ã‚Â³n tiene provincia, cantÃƒÆ’Ã‚Â³n, distrito y seÃƒÆ’Ã‚Â±as claras, asigna confianza >= 0.85.
 
-Dirección recibida: "{$direccionTexto}"
+DirecciÃƒÆ’Ã‚Â³n recibida: "{$direccionTexto}"
 PROMPT;
 
         if (!empty($geminiKey)) {
@@ -163,7 +163,7 @@ PROMPT;
         $requeridos = ['provincia', 'canton', 'distrito', 'otras_senas', 'confianza'];
         $clavesExtra = array_diff(array_keys($datos), $requeridos);
         if (!empty($clavesExtra)) {
-            throw new \RuntimeException('El esquema DireccionNormalizada prohíbe propiedades adicionales.');
+            throw new \RuntimeException('El esquema DireccionNormalizada prohÃƒÆ’Ã‚Â­be propiedades adicionales.');
         }
 
         foreach ($requeridos as $campo) {
@@ -173,15 +173,15 @@ PROMPT;
         }
 
         if (!in_array($datos['provincia'], self::PROVINCIAS_VALIDAS, true)) {
-            throw new \RuntimeException('Provincia fuera del catálogo permitido de Costa Rica.');
+            throw new \RuntimeException('Provincia fuera del catÃƒÆ’Ã‚Â¡logo permitido de Costa Rica.');
         }
 
         if (!is_string($datos['canton']) || mb_strlen(trim($datos['canton'])) < 1 || mb_strlen($datos['canton']) > 60) {
-            throw new \RuntimeException('Cantón inválido según esquema.');
+            throw new \RuntimeException('CantÃƒÆ’Ã‚Â³n invÃƒÆ’Ã‚Â¡lido segÃƒÆ’Ã‚Âºn esquema.');
         }
 
         if (!is_string($datos['distrito']) || mb_strlen(trim($datos['distrito'])) < 1 || mb_strlen($datos['distrito']) > 60) {
-            throw new \RuntimeException('Distrito inválido según esquema.');
+            throw new \RuntimeException('Distrito invÃƒÆ’Ã‚Â¡lido segÃƒÆ’Ã‚Âºn esquema.');
         }
 
         if (!is_string($datos['otras_senas']) || mb_strlen($datos['otras_senas']) > 250) {
@@ -202,7 +202,7 @@ PROMPT;
 
     private function normalizarLocalFallback(string $texto): array
     {
-        $provinciaDetectada = 'San José';
+        $provinciaDetectada = 'San JosÃƒÆ’Ã‚Â©';
         foreach (self::PROVINCIAS_VALIDAS as $prov) {
             if (mb_stripos($texto, $prov) !== false) {
                 $provinciaDetectada = $prov;
@@ -212,7 +212,7 @@ PROMPT;
 
         return [
             'provincia' => $provinciaDetectada,
-            'canton' => 'San José',
+            'canton' => 'San JosÃƒÆ’Ã‚Â©',
             'distrito' => 'Carmen',
             'otras_senas' => mb_substr($texto, 0, 250),
             'confianza' => 0.92, // Confianza alta para asegurar estado 'normalizada'
