@@ -107,3 +107,44 @@ Las pruebas con direcciones de Estados Unidos no garantizan por sí solas la dis
 La Investigación Aplicada 1 permitió evaluar las características funcionales y el comportamiento de EasyPost y Shippo.
 
 El equipo seleccionó **Shippo** porque sus funcionalidades se consideran más adecuadas para los objetivos de RDC Repuestos, priorizando la utilidad de la integración sobre la diferencia observada en los tiempos de respuesta.
+
+
+
+
+
+
+## Avance 2 — Etapa 4: Pruebas y entrega
+
+### Pruebas automatizadas con Pest
+
+Se implementaron siete pruebas del contrato de la API REST utilizando Pest 4, ejecutadas localmente sin realizar solicitudes a servicios externos.
+
+Las pruebas verifican:
+
+1. Rechazo de SKU superior a 100 caracteres.
+2. Rechazo de página igual a cero.
+3. Rechazo de más de 100 productos por página.
+4. Respuesta HTTP 404 para un identificador de pedido no numérico.
+5. Rechazo de sistemas de bitácora inválidos.
+6. Rechazo de estados de bitácora inválidos.
+7. Rechazo de direcciones de bitácora inválidas.
+
+**Archivo de pruebas:** `motor/tests/Feature/ProductosContratoTest.php`
+
+### Ejecución
+
+Desde la carpeta `motor`:
+
+```bash
+php artisan test tests/Feature/ProductosContratoTest.php
+```
+
+Estas pruebas utilizan el cliente HTTP interno de Laravel y comprueban las validaciones antes de realizar consultas a la base de datos.
+
+### Video de demostración
+
+La demostración del avance incluye la estructura de la API, los endpoints implementados, la ejecución de las pruebas automatizadas y la explicación de sus resultados.
+
+### Seguridad
+
+Las pruebas no utilizan credenciales reales de WooCommerce, Shippo ni proveedores de inteligencia artificial. No se incluyen archivos `.env` en el repositorio.
