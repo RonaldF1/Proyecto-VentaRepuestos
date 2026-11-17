@@ -129,3 +129,74 @@ copy .env.example .env
 php artisan key:generate
 php artisan migrate:fresh --seed
 php artisan serve
+
+## Etapa 4 — Pruebas automatizadas y demostración del sistema
+
+**Responsable:** Dylan Andrés Soto Jiménez
+
+### 4.1 Pruebas automatizadas con Pest
+
+Se desarrollaron siete pruebas automatizadas utilizando Pest para verificar diferentes validaciones del contrato de la API REST del motor RDC Repuestos, desarrollado con Laravel.
+
+Las pruebas se enfocan en comprobar el comportamiento del sistema ante solicitudes inválidas, incluyendo:
+
+- Validación de SKU en la consulta de productos.
+- Validación de parámetros de paginación.
+- Comprobación de identificadores de pedidos.
+- Validación de filtros de consulta de la bitácora.
+- Verificación de respuestas HTTP ante datos incorrectos.
+
+Las pruebas se ejecutaron en el entorno local, sin realizar solicitudes a servicios externos.
+
+**Archivo de pruebas:** `motor/tests/Feature/ProductosContratoTest.php`
+
+**Comando de ejecución:**
+
+`php artisan test tests/Feature/ProductosContratoTest.php`
+
+**Resultado obtenido:**
+- 7 pruebas aprobadas.
+- 20 aserciones.
+- Sin fallos en la ejecución mostrada.
+
+### 4.2 Video de las pruebas automatizadas
+
+Se realizó una demostración en VS Code que incluye la ejecución de las pruebas con Pest, la revisión de las rutas de la API REST y la documentación del proyecto.
+
+**Duración:** aproximadamente 3 minutos y 45 segundos.
+
+**Video de pruebas Pest:** [Ver demostración](PEGAR_ENLACE_VIDEO_PEST)
+
+### 4.3 Demostración del recorrido completo — Punto 6.10
+
+Se realizó una segunda grabación para demostrar el recorrido de un pedido de prueba desde WooCommerce hasta el motor de integración desarrollado con Laravel.
+
+Durante la demostración se presentan las siguientes operaciones:
+
+1. **Creación del pedido:** se utiliza WooCommerce para crear el pedido de prueba n.º 101, correspondiente a un filtro de aceite para Toyota, por un total de ₡6.500.
+2. **Webhook de WooCommerce:** se muestra el mecanismo de envío de notificaciones al motor Laravel mediante el endpoint `POST /api/v1/webhooks/woocommerce`.
+3. **Consulta del pedido:** se utiliza Postman para consultar `GET /api/v1/pedidos/101`, obteniendo una respuesta HTTP `200 OK`.
+4. **Bitácora:** se consulta `GET /api/v1/bitacora` para revisar los eventos registrados por el motor.
+5. **Conector Shippo:** se presenta el resultado registrado por el sistema para la operación logística del pedido, utilizando el proveedor seleccionado por el equipo.
+6. **Tratamiento de la dirección:** se muestra el estado de la dirección de envío, ya sea normalizada o pendiente de revisión, según el resultado del procesamiento.
+
+La demostración se realizó en un entorno de desarrollo, utilizando datos de prueba.
+
+**Video del recorrido completo:** [Ver demostración] https://drive.google.com/file/d/12IjbnC63Nh4nxlrFKy71O1s316Y3vpCW/view?usp=sharing
+
+### 4.4 Evidencias y entrega
+
+Las evidencias de esta etapa incluyen:
+
+- Archivo de pruebas automatizadas con Pest.
+- Resultados de las pruebas ejecutadas.
+- Consultas del motor mediante Postman.
+- Video de las pruebas automatizadas.
+- Video del recorrido completo de integración.
+- Documentación actualizada en el README.
+
+Los cambios de las pruebas fueron subidos a la rama `dylan-desarrollo` y presentados al equipo mediante el Pull Request #52.
+
+**Pull Request:** [Ver PR #52](https://github.com/RonaldF1/Proyecto-VentaRepuestos/pull/52)
+
+**Nota:** Las pruebas automatizadas del contrato de la API y la demostración del recorrido completo constituyen evidencias diferentes de la entrega.
