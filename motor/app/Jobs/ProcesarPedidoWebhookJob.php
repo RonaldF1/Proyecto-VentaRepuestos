@@ -2,8 +2,8 @@
 
 namespace App\Jobs;
 
+use App\Conectores\ConectorInterface;
 use App\Models\Pedido;
-use App\Services\ConectorLogisticoService;
 use App\Services\NormalizadorDireccionService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -24,7 +24,7 @@ class ProcesarPedidoWebhookJob implements ShouldQueue
 
     public function handle(
         NormalizadorDireccionService $normalizador,
-        ConectorLogisticoService $conector
+        ConectorInterface $conector
     ): void {
         $pedido = Pedido::find($this->pedidoId);
         if (!$pedido) {
@@ -49,7 +49,14 @@ class ProcesarPedidoWebhookJob implements ShouldQueue
             return;
         }
 
-        // Paso 2 (3.4): Ejecutar acción en el conector logístico
-        $conector->procesarEnvio($pedido);
+        // Paso 2 (3.4): Ejecutar acción en el conector logístico vía ConectorInterface
+        $resultado = $conector->ejecutar($pedido);
+
+        $pedido->update([
+            'conector_estado' => $resultado['estado'] ?? 'fallo',
+            'conector_detalle' => $resultado['detalle'] ?? null,
+            'conector_referencia_externa' => $resultado['referencia_externa'] ?? null,
+            'conector_actualizado_en' => now(),
+        ]);
     }
 }
