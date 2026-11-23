@@ -1,7 +1,7 @@
 <?php
 
 declare(strict_types=1);
-
+//se sube de nuevo
 namespace Src\Pedidos\Pedidos\Infrastructure\Adapters;
 
 use Illuminate\Support\Facades\Http;
