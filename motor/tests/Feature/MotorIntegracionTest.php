@@ -1,5 +1,5 @@
 <?php
-
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Src\Pedidos\Pedidos\Infrastructure\Adapters\ShippoConectorAdapter as ShippoConector;
 use Src\Pedidos\Pedidos\Infrastructure\Jobs\ProcesarPedidoWebhookJob;
 use Src\Integracion\Bitacora\Infrastructure\Persistence\Models\BitacoraModel as Bitacora;
@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
-
+uses(RefreshDatabase::class);
 beforeEach(function () {
     Http::preventStrayRequests();
     Config::set('services.webhook.secret', 'secreto-test-pest-2026');
