@@ -2,13 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Src\Pedidos\Pedidos\Infrastructure\Persistence\Models\WebhookEntregaModel;
 
-class WebhookEntrega extends Model
-{
-    protected $table = 'webhook_entregas';
-
-    protected $fillable = [
-        'delivery_id',
-    ];
-}
+class WebhookEntrega extends WebhookEntregaModel {}

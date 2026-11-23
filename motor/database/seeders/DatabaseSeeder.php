@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\Bitacora;
-use App\Models\Pedido;
-use App\Models\Producto;
+use Src\Integracion\Bitacora\Infrastructure\Persistence\Models\BitacoraModel as Bitacora;
+use Src\Pedidos\Pedidos\Infrastructure\Persistence\Models\PedidoModel as Pedido;
+use Src\Catalogo\Productos\Infrastructure\Persistence\Models\ProductoModel as Producto;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
@@ -17,20 +17,20 @@ class DatabaseSeeder extends Seeder
         Pedido::truncate();
         Producto::truncate();
 
-        // 2. Productos según contrato de prueba
+        // 2. Productos segÃºn contrato de prueba
         $nombres = [
-            ['CONTRATO-001', 'Café Tarrazú en grano 250 g', 'simple', 5200, 12, 'Café en grano', 'tarrazu'],
-            ['CAF-TAR', 'Café Tarrazú molido', 'variable', 5200, null, 'Café molido', 'tarrazu'],
-            ['CAF-BRU-500', 'Café Brunca en grano 500 g', 'simple', 9800, 8, 'Café en grano', 'brunca'],
-            ['CAF-ORO-250', 'Café Orosi molido 250 g', 'simple', 4900, 20, 'Café molido', 'orosi'],
-            ['CAF-TUR-250', 'Café Turrialba en grano 250 g', 'simple', 5100, 0, 'Café en grano', 'turrialba'],
-            ['CAF-GUA-1K', 'Café Guanacaste en grano 1 kg', 'simple', 17500, 4, 'Café en grano', 'guanacaste'],
-            ['CAF-VCE-250', 'Café Valle Central molido 250 g', 'simple', 4600, 15, 'Café molido', 'valle-central'],
-            ['CAF-VOC-500', 'Café Valle Occidental en grano 500 g', 'simple', 9200, 6, 'Café en grano', 'valle-occidental'],
-            ['CAF-TRI-250', 'Café Tres Ríos molido 250 g', 'simple', 5600, 9, 'Café molido', 'tres-rios'],
-            ['TAZ-CER-01', 'Taza de cerámica', 'simple', 6500, 20, 'Accesorios', null],
+            ['CONTRATO-001', 'CafÃ© TarrazÃº en grano 250 g', 'simple', 5200, 12, 'CafÃ© en grano', 'tarrazu'],
+            ['CAF-TAR', 'CafÃ© TarrazÃº molido', 'variable', 5200, null, 'CafÃ© molido', 'tarrazu'],
+            ['CAF-BRU-500', 'CafÃ© Brunca en grano 500 g', 'simple', 9800, 8, 'CafÃ© en grano', 'brunca'],
+            ['CAF-ORO-250', 'CafÃ© Orosi molido 250 g', 'simple', 4900, 20, 'CafÃ© molido', 'orosi'],
+            ['CAF-TUR-250', 'CafÃ© Turrialba en grano 250 g', 'simple', 5100, 0, 'CafÃ© en grano', 'turrialba'],
+            ['CAF-GUA-1K', 'CafÃ© Guanacaste en grano 1 kg', 'simple', 17500, 4, 'CafÃ© en grano', 'guanacaste'],
+            ['CAF-VCE-250', 'CafÃ© Valle Central molido 250 g', 'simple', 4600, 15, 'CafÃ© molido', 'valle-central'],
+            ['CAF-VOC-500', 'CafÃ© Valle Occidental en grano 500 g', 'simple', 9200, 6, 'CafÃ© en grano', 'valle-occidental'],
+            ['CAF-TRI-250', 'CafÃ© Tres RÃ­os molido 250 g', 'simple', 5600, 9, 'CafÃ© molido', 'tres-rios'],
+            ['TAZ-CER-01', 'Taza de cerÃ¡mica', 'simple', 6500, 20, 'Accesorios', null],
             ['PRE-FRA-01', 'Prensa francesa 600 ml', 'simple', 18900, 5, 'Accesorios', null],
-            ['MOL-MAN-01', 'Molino manual de café', 'simple', 24500, 3, 'Accesorios', null],
+            ['MOL-MAN-01', 'Molino manual de cafÃ©', 'simple', 24500, 3, 'Accesorios', null],
             ['FIL-PAP-100', 'Filtros de papel, 100 unidades', 'simple', 2300, 40, 'Accesorios', null],
             ['KIT-BAR-01', 'Kit de barista', 'agrupado', 45000, null, 'Accesorios', null],
         ];
@@ -52,7 +52,7 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // 3. Pedidos según contrato
+        // 3. Pedidos segÃºn contrato
         Pedido::create([
             'id' => 1001,
             'estado' => 'processing',
@@ -60,8 +60,8 @@ class DatabaseSeeder extends Seeder
             'total' => 16900,
             'creado_en' => Carbon::parse('2026-11-10T14:02:55-06:00'),
             'lineas' => [
-                ['sku' => 'CONTRATO-001', 'nombre' => 'Café Tarrazú en grano 250 g', 'cantidad' => 2, 'precio_unitario' => 5200, 'subtotal' => 10400],
-                ['sku' => 'TAZ-CER-01', 'nombre' => 'Taza de cerámica', 'cantidad' => 1, 'precio_unitario' => 6500, 'subtotal' => 6500],
+                ['sku' => 'CONTRATO-001', 'nombre' => 'CafÃ© TarrazÃº en grano 250 g', 'cantidad' => 2, 'precio_unitario' => 5200, 'subtotal' => 10400],
+                ['sku' => 'TAZ-CER-01', 'nombre' => 'Taza de cerÃ¡mica', 'cantidad' => 1, 'precio_unitario' => 6500, 'subtotal' => 6500],
             ],
             'direccion_estado' => 'normalizada',
             'direccion_texto' => '100 metros norte de la iglesia de Ciudad Quesada, casa verde',
@@ -85,10 +85,10 @@ class DatabaseSeeder extends Seeder
             'total' => 9800,
             'creado_en' => Carbon::parse('2026-11-10T15:10:00-06:00'),
             'lineas' => [
-                ['sku' => 'CAF-BRU-500', 'nombre' => 'Café Brunca en grano 500 g', 'cantidad' => 1, 'precio_unitario' => 9800, 'subtotal' => 9800],
+                ['sku' => 'CAF-BRU-500', 'nombre' => 'CafÃ© Brunca en grano 500 g', 'cantidad' => 1, 'precio_unitario' => 9800, 'subtotal' => 9800],
             ],
             'direccion_estado' => 'pendiente_revision',
-            'direccion_texto' => 'donde siempre, frente a la pulpería',
+            'direccion_texto' => 'donde siempre, frente a la pulperÃ­a',
             'direccion_normalizada' => null,
             'conector_estado' => 'fallo',
             'conector_detalle' => null,
@@ -114,14 +114,14 @@ class DatabaseSeeder extends Seeder
             'conector_actualizado_en' => null,
         ]);
 
-        // 4. Bitácora según contrato
+        // 4. BitÃ¡cora segÃºn contrato
         $plantilla = [
             ['entrante', 'tienda', 'webhook_pedido_creado', 'exito', 200, 1, 15, 'contrato-entrega-001', null],
             ['saliente', 'conector', 'ejecutar_accion', 'exito', 200, 1, 412, '1001', null],
             ['saliente', 'ia', 'normalizar_direccion', 'exito', 200, 1, 1830, '1001', null],
             ['entrante', 'tienda', 'webhook_pedido_creado', 'duplicado', 200, 1, 9, 'contrato-entrega-001', null],
             ['entrante', 'tienda', 'webhook_pedido_creado', 'exito', 200, 1, 14, 'contrato-entrega-002', null],
-            ['saliente', 'conector', 'ejecutar_accion', 'fallo', 503, 3, 9120, '1002', 'El proveedor respondió 503 en los tres intentos'],
+            ['saliente', 'conector', 'ejecutar_accion', 'fallo', 503, 3, 9120, '1002', 'El proveedor respondiÃ³ 503 en los tres intentos'],
             ['saliente', 'ia', 'normalizar_direccion', 'fallo', 200, 1, 2210, '1002', 'La salida no cumple el esquema: falta distrito'],
             ['entrante', 'tienda', 'webhook_pedido_creado', 'firma_invalida', 401, 1, 4, 'contrato-entrega-003', 'La firma no coincide'],
             ['saliente', 'tienda', 'listar_productos', 'exito', 200, 1, 640, null, null],

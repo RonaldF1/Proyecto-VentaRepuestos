@@ -1,14 +1,11 @@
 <?php
 
-use App\Http\Controllers\Api\V1\BitacoraController;
-use App\Http\Controllers\Api\V1\PedidoController;
-use App\Http\Controllers\Api\V1\ProductoController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\V1\WebhookController;
+declare(strict_types=1);
 
-Route::prefix('v1')->group(function () {
-    Route::get('/productos', [ProductoController::class, 'index']);
-    Route::get('/pedidos/{id}', [PedidoController::class, 'show']);
-    Route::get('/bitacora', [BitacoraController::class, 'index']);
-    Route::post('/webhooks/woocommerce', [WebhookController::class, 'woocommerce']);
+use Illuminate\Support\Facades\Route;
+
+Route::prefix('v1')->group(function (): void {
+    require base_path('src/Catalogo/Productos/Infrastructure/Http/routes.php');
+    require base_path('src/Pedidos/Pedidos/Infrastructure/Http/routes.php');
+    require base_path('src/Integracion/Bitacora/Infrastructure/Http/routes.php');
 });

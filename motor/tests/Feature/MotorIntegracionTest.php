@@ -1,12 +1,12 @@
 <?php
 
-use App\Conectores\ShippoConector;
-use App\Jobs\ProcesarPedidoWebhookJob;
-use App\Models\Bitacora;
-use App\Models\Pedido;
-use App\Models\Producto;
-use App\Models\WebhookEntrega;
-use App\Services\NormalizadorDireccionService;
+use Src\Pedidos\Pedidos\Infrastructure\Adapters\ShippoConectorAdapter as ShippoConector;
+use Src\Pedidos\Pedidos\Infrastructure\Jobs\ProcesarPedidoWebhookJob;
+use Src\Integracion\Bitacora\Infrastructure\Persistence\Models\BitacoraModel as Bitacora;
+use Src\Pedidos\Pedidos\Infrastructure\Persistence\Models\PedidoModel as Pedido;
+use Src\Catalogo\Productos\Infrastructure\Persistence\Models\ProductoModel as Producto;
+use Src\Pedidos\Pedidos\Infrastructure\Persistence\Models\WebhookEntregaModel as WebhookEntrega;
+use Src\Pedidos\Pedidos\Infrastructure\Adapters\GeminiNormalizadorAdapter as NormalizadorDireccionService;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
@@ -25,7 +25,7 @@ beforeEach(function () {
     Bitacora::whereIn('correlacion', ['wc-delivery-test-001', 'wc-delivery-invalida-002', 'wc-delivery-repetida-003', '7005', '7006', 'pagina-1'])->delete();
 });
 
-// 1. Webhook con firma vÃ¡lida guarda el pedido
+// 1. Webhook con firma vÃƒÂ¡lida guarda el pedido
 it('1. guarda el pedido cuando recibe un webhook con firma HMAC-SHA256 valida', function () {
     $secret = config('services.webhook.secret');
     $deliveryId = 'wc-delivery-test-001';
@@ -73,14 +73,14 @@ it('1. guarda el pedido cuando recibe un webhook con firma HMAC-SHA256 valida', 
     $this->assertDatabaseHas('webhook_entregas', ['delivery_id' => $deliveryId]);
 });
 
-// 2. Webhook con firma invÃ¡lida responde 401 y no guarda nada
+// 2. Webhook con firma invÃƒÂ¡lida responde 401 y no guarda nada
 it('2. responde 401 y no guarda nada ante una firma HMAC invalida', function () {
     $deliveryId = 'wc-delivery-invalida-002';
     $payload = [
         'id' => 7002,
         'status' => 'processing',
         'line_items' => [
-            ['name' => 'BujÃ­a', 'quantity' => 1, 'price' => 3000],
+            ['name' => 'BujÃƒÂ­a', 'quantity' => 1, 'price' => 3000],
         ],
     ];
 
@@ -139,7 +139,7 @@ it('3. garantiza idempotencia respondiendo 200 duplicado si el Delivery-ID ya fu
     $response->assertJsonPath('estado', 'duplicado');
 });
 
-// 4. Si la tienda responde 500, el motor reintenta 3 veces y anota en bitÃ¡cora
+// 4. Si la tienda responde 500, el motor reintenta 3 veces y anota en bitÃƒÂ¡cora
 it('4. reintenta 3 veces y anota en bitacora si la API de WooCommerce responde 500', function () {
     Http::fake([
         'https://tienda-repuestos-test.local/wp-json/wc/v3/products*' => Http::response([
@@ -162,7 +162,7 @@ it('4. reintenta 3 veces y anota en bitacora si la API de WooCommerce responde 5
     expect($bitacora->codigo_http)->toBe(500);
 });
 
-// 5. Si el conector falla, el pedido queda guardado y el fallo en bitÃ¡cora
+// 5. Si el conector falla, el pedido queda guardado y el fallo en bitÃƒÂ¡cora
 it('5. mantiene el pedido guardado y registra el fallo en bitacora si el conector logistico falla', function () {
     Http::fake([
         'https://api.goshippo.com/shipments/' => Http::response([
@@ -215,7 +215,7 @@ it('5. mantiene el pedido guardado y registra el fallo en bitacora si el conecto
     expect($bitacora)->not->toBeNull();
 });
 
-// 6. Si la IA devuelve algo fuera de esquema o con baja confianza, la direcciÃ³n queda pendiente_revision
+// 6. Si la IA devuelve algo fuera de esquema o con baja confianza, la direcciÃƒÂ³n queda pendiente_revision
 it('6. marca la direccion como pendiente_revision si la respuesta de IA tiene baja confianza o esquema invalido', function () {
     // Simulamos respuesta de IA con confianza baja (menor a 0.85)
     Http::fake([
@@ -254,7 +254,7 @@ it('6. marca la direccion como pendiente_revision si la respuesta de IA tiene ba
     ]);
 });
 
-// 7. GET /api/v1/productos responde con la paginaciÃ³n del contrato
+// 7. GET /api/v1/productos responde con la paginaciÃƒÂ³n del contrato
 it('7. responde con el formato y metadatos de paginacion del contrato en GET /api/v1/productos', function () {
     // Asegurar productos de prueba
     Producto::updateOrCreate(
