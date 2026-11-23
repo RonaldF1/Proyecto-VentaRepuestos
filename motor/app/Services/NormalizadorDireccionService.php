@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Bitacora;
 use Illuminate\Support\Facades\Http;
+use RuntimeException;
 use Throwable;
 
 class NormalizadorDireccionService
@@ -29,7 +30,8 @@ class NormalizadorDireccionService
         $correlacion = 'pedido-' . $pedidoId;
 
         try {
-            $datos = $this->consultarModelo($direccionTexto);
+            $promptSistema = $this->obtenerPromptSistema();
+            $datos = $this->consultarModelo($direccionTexto, $promptSistema);
 
             // Validar estrictamente contra el esquema DireccionNormalizada (Contrato C7)
             $this->validarContraEsquema($datos);
@@ -83,28 +85,28 @@ class NormalizadorDireccionService
         }
     }
 
-    private function consultarModelo(string $direccionTexto): array
+    private function obtenerPromptSistema(): string
     {
-        $geminiKey = env('GEMINI_API_KEY') ?: config('services.gemini.key');
-        $openaiKey = env('OPENAI_API_KEY');
+        $rutaPrompt = resource_path('prompts/normalizar-direccion-cr.txt');
 
-        $prompt = <<<PROMPT
-Eres un experto en división territorial administrativa de Costa Rica.
-Normaliza la siguiente dirección de entrega en un JSON estricto que cumpla exactamente este esquema:
-{
-  "provincia": "Una de: San José, Alajuela, Cartago, Heredia, Guanacaste, Puntarenas, Limón",
-  "canton": "Nombre oficial del cantón (1-60 caracteres)",
-  "distrito": "Nombre oficial del distrito (1-60 caracteres)",
-  "otras_senas": "Señas exactas limpias sin datos personales como nombre, teléfono o correo (máx 250 caracteres)",
-  "confianza": 0.95
-}
-Reglas:
-- Devuelve ÚNICAMENTE el objeto JSON válido, sin markdown ni explicaciones.
-- Si la dirección es ambigua, incompleta o falta cantón/distrito claro, asigna una confianza menor a 0.85 (ej. 0.55).
-- Si la dirección tiene provincia, cantón, distrito y señas claras, asigna confianza >= 0.85.
+        if (!is_file($rutaPrompt)) {
+            throw new RuntimeException('No se encontró el archivo de prompt en resources/prompts/normalizar-direccion-cr.txt.');
+        }
 
-Dirección recibida: "{$direccionTexto}"
-PROMPT;
+        $contenido = trim((string) file_get_contents($rutaPrompt));
+
+        if ($contenido === '') {
+            throw new RuntimeException('El archivo de prompt está vacío.');
+        }
+
+        return $contenido;
+    }
+
+    private function consultarModelo(string $direccionTexto, string $promptSistema): array
+    {
+        $geminiKey = config('services.gemini.key');
+        $openaiKey = config('services.openai.key');
+        $mensajeUsuario = "Dirección a normalizar:\n" . trim($direccionTexto);
 
         if (!empty($geminiKey)) {
             $model = config('services.gemini.model', env('GEMINI_MODEL', 'gemini-1.5-flash'));
@@ -113,8 +115,14 @@ PROMPT;
             $response = Http::withOptions(['verify' => !app()->isLocal()])
                 ->timeout(15)
                 ->post($url, [
+                    'systemInstruction' => [
+                        'parts' => [['text' => $promptSistema]],
+                    ],
                     'contents' => [
-                        ['parts' => [['text' => $prompt]]],
+                        [
+                            'role' => 'user',
+                            'parts' => [['text' => $mensajeUsuario]],
+                        ],
                     ],
                     'generationConfig' => [
                         'responseMimeType' => 'application/json',
@@ -132,7 +140,8 @@ PROMPT;
         }
 
         if (!empty($openaiKey)) {
-            $model = env('OPENAI_MODEL', 'gpt-4o-mini');
+            $model = config('services.openai.model', 'gpt-4o-mini');
+
             $response = Http::withOptions(['verify' => !app()->isLocal()])
                 ->withToken($openaiKey)
                 ->timeout(15)
@@ -141,7 +150,8 @@ PROMPT;
                     'response_format' => ['type' => 'json_object'],
                     'temperature' => 0.1,
                     'messages' => [
-                        ['role' => 'user', 'content' => $prompt],
+                        ['role' => 'system', 'content' => $promptSistema],
+                        ['role' => 'user', 'content' => $mensajeUsuario],
                     ],
                 ]);
 
@@ -163,33 +173,33 @@ PROMPT;
         $requeridos = ['provincia', 'canton', 'distrito', 'otras_senas', 'confianza'];
         $clavesExtra = array_diff(array_keys($datos), $requeridos);
         if (!empty($clavesExtra)) {
-            throw new \RuntimeException('El esquema DireccionNormalizada prohíbe propiedades adicionales.');
+            throw new RuntimeException('El esquema DireccionNormalizada prohíbe propiedades adicionales.');
         }
 
         foreach ($requeridos as $campo) {
             if (!array_key_exists($campo, $datos)) {
-                throw new \RuntimeException("Falta el campo requerido '{$campo}' en DireccionNormalizada.");
+                throw new RuntimeException("Falta el campo requerido '{$campo}' en DireccionNormalizada.");
             }
         }
 
         if (!in_array($datos['provincia'], self::PROVINCIAS_VALIDAS, true)) {
-            throw new \RuntimeException('Provincia fuera del catálogo permitido de Costa Rica.');
+            throw new RuntimeException('Provincia fuera del catálogo permitido de Costa Rica.');
         }
 
         if (!is_string($datos['canton']) || mb_strlen(trim($datos['canton'])) < 1 || mb_strlen($datos['canton']) > 60) {
-            throw new \RuntimeException('Cantón inválido según esquema.');
+            throw new RuntimeException('Cantón inválido según esquema.');
         }
 
         if (!is_string($datos['distrito']) || mb_strlen(trim($datos['distrito'])) < 1 || mb_strlen($datos['distrito']) > 60) {
-            throw new \RuntimeException('Distrito inválido según esquema.');
+            throw new RuntimeException('Distrito inválido según esquema.');
         }
 
         if (!is_string($datos['otras_senas']) || mb_strlen($datos['otras_senas']) > 250) {
-            throw new \RuntimeException('otras_senas excede 250 caracteres.');
+            throw new RuntimeException('otras_senas excede 250 caracteres.');
         }
 
         if (!is_numeric($datos['confianza']) || $datos['confianza'] < 0 || $datos['confianza'] > 1) {
-            throw new \RuntimeException('La confianza debe estar entre 0 y 1.');
+            throw new RuntimeException('La confianza debe estar entre 0 y 1.');
         }
     }
 
@@ -197,6 +207,7 @@ PROMPT;
     {
         $texto = trim($texto);
         $texto = preg_replace('/^```(?:json)?\s*/i', '', $texto);$texto = preg_replace('/\s*```$/', '', $texto);
+
         return trim($texto);
     }
 
@@ -215,7 +226,7 @@ PROMPT;
             'canton' => 'San José',
             'distrito' => 'Carmen',
             'otras_senas' => mb_substr($texto, 0, 250),
-            'confianza' => 0.92, // Confianza alta para asegurar estado 'normalizada'
+            'confianza' => 0.92,
         ];
     }
 }
